@@ -1,0 +1,1 @@
+export const BannerImg = "/sample/banner.png"
