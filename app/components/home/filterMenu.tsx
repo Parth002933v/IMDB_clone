@@ -3,22 +3,25 @@ import { twMerge } from 'tailwind-merge';
 import { IoIosArrowDown } from 'react-icons/io';
 import useToggle from '~/hooks/useToogle';
 
-interface FilterMenuProps {
+interface FilterMenuProps<T extends string> {
 	menuTitle: string;
-	menuOptions: string[];
+	menuOptions: T[];
 	className?: string;
 	darkTheme?: boolean;
+	onClick?: (string: T) => void;
 }
 
-const FilterMenu = ({
+const FilterMenu = <T extends string>({
 	menuOptions,
 	menuTitle,
 	darkTheme = false,
-}: FilterMenuProps) => {
+	onClick,
+}: FilterMenuProps<T>) => {
 	const { isOpen, toggleIsOpen } = useToggle(true);
 
 	const [selectedOption, setSelectedOption] = useState(menuOptions[0]);
 
+	// console.log(selectedOption);
 	return (
 		<div className={'flex items-center px-5'}>
 			<label
@@ -82,9 +85,18 @@ const FilterMenu = ({
 
 										val !== selectedOption && darkTheme && 'text-white'
 									)}
+									// onClick={() => onselect}
+
 									onClick={() => {
-										setSelectedOption(val);
-										toggleIsOpen();
+										if (val === selectedOption) {
+											toggleIsOpen();
+										} else {
+											setSelectedOption(menuOptions[i]);
+											toggleIsOpen();
+											if (onClick) {
+												onClick(menuOptions[i]);
+											}
+										}
 									}}
 								>
 									<div

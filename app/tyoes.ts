@@ -20,6 +20,13 @@ export interface PopularMovieData extends BaseMovieData {
 	video: boolean;
 }
 
+export interface FreeToWatchData extends BaseMovieData {
+	original_title: string;
+	release_date: string;
+	title: string;
+	video: boolean;
+}
+
 interface BaseMovieData {
 	id: number;
 	adult: boolean;
@@ -35,3 +42,37 @@ interface BaseMovieData {
 
 export type TTrendingMovie = PaginatedResponse<TrendingMovieData>;
 export type TPopularMovie = PaginatedResponse<PopularMovieData>;
+export type TFreeToWatch = PaginatedResponse<FreeToWatchData>;
+
+export type PopularMovieGroupType =
+	| 'streaming'
+	| 'on-tv'
+	| 'for-rent'
+	| 'in-theatres';
+export const isPopularMovieGroupType = (
+	value: string
+): value is PopularMovieGroupType => {
+	const allowedValues: PopularMovieGroupType[] = [
+		'streaming',
+		'on-tv',
+		'for-rent',
+		'in-theatres',
+	];
+	return allowedValues.includes(value as PopularMovieGroupType);
+};
+
+export type TrendingMovieGroupType = 'day' | 'week';
+export const isTrendingMovieGroupType = (
+	value: string
+): value is TrendingMovieGroupType => {
+	const allowedValues: TrendingMovieGroupType[] = ['day', 'week'];
+	return allowedValues.includes(value as TrendingMovieGroupType);
+};
+
+export type FreeToWatchGroupType = 'movie' | 'tv';
+export const isFreeToWatchMovieGroupType = (
+	value: string
+): value is FreeToWatchGroupType => {
+	const allowedValues: FreeToWatchGroupType[] = ['movie', 'tv'];
+	return allowedValues.includes(value as FreeToWatchGroupType);
+};

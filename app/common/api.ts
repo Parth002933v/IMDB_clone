@@ -1,5 +1,15 @@
-export const GetTrendingMovies = (by: 'day' | 'week') => {
-	return fetch(`https://api.themoviedb.org/3/trending/tv/${by}?language=en-US`, {
+import {
+	FreeToWatchGroupType,
+	PopularMovieGroupType,
+	TrendingMovieGroupType,
+} from '~/tyoes';
+
+export const GetTrendingMovies = (by: TrendingMovieGroupType) => {
+	// const baseURL = 'https://api.themoviedb.org/3/discover/movie';
+	// const params = new URLSearchParams();
+
+	return fetch(`https://api.themoviedb.org/3/trending/movie/${by}?language=en-US`, {
+		cache: 'force-cache',
 		headers: {
 			Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOCKEN}`,
 			'Content-Type': 'application/json',
@@ -7,30 +17,46 @@ export const GetTrendingMovies = (by: 'day' | 'week') => {
 	});
 };
 
-export const GetPopularMovies = (
-	by: 'Streaming' | 'On TV' | 'For Rent' | 'In Theaters'
-) => {
+export const GetPopularMovies = (by: PopularMovieGroupType) => {
 	const baseURL = 'https://api.themoviedb.org/3/discover/movie';
 	const params = new URLSearchParams();
 
 	switch (by) {
-		case 'Streaming':
+		case 'streaming':
 			params.set('with_watch_monetization_types', 'flatrate');
 			break;
-		case 'On TV':
+		case 'on-tv':
 			params.set('with_release_type', '4');
 			break;
-		case 'For Rent':
+		case 'for-rent':
 			params.set('with_watch_monetization_types', 'rent');
 			break;
-		case 'In Theaters':
+		case 'in-theatres':
 			params.set('with_release_type', '3');
 			break;
 		default:
 			params.set('with_watch_monetization_types', 'flatrate');
 	}
 
+	params.set('watch_region', 'IN');
 	return fetch(`${baseURL}?${params}`, {
+		cache: 'force-cache',
+		headers: {
+			Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOCKEN}`,
+			'Content-Type': 'application/json',
+		},
+	});
+};
+
+export const GetFreeShow = (by: FreeToWatchGroupType) => {
+	const baseUrl = `https://api.themoviedb.org/3/discover/${by}`;
+
+	const params = new URLSearchParams();
+	params.set('with_watch_monetization_types', 'free');
+	params.set('watch_region', 'IN');
+
+	return fetch(`${baseUrl}?${params.toString()}`, {
+		cache: 'force-cache',
 		headers: {
 			Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOCKEN}`,
 			'Content-Type': 'application/json',

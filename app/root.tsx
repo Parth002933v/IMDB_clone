@@ -12,6 +12,9 @@ import './app.css';
 import NavBar from '~/components/navbar';
 import Footer from '~/components/footer';
 import { Route } from '../.react-router/types/app/+types/root';
+import LoadingBar, { IProps, LoadingBarRef } from 'react-top-loading-bar';
+import { useRef } from 'react';
+import { LoaderContext } from '~/hooks/useLoader';
 
 export const links: LinksFunction = () => [
 	{ rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -45,14 +48,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+	const loaderRef = useRef<LoadingBarRef | null>(null);
+
 	return (
-		<div className={'flex flex-col'}>
-			<NavBar />
-			<div className={'flex-1'}>
-				<Outlet />
+		<LoaderContext.Provider value={{ loaderRef: loaderRef }}>
+			<div className={'flex flex-col'}>
+				<LoadingBar ref={loaderRef} />
+				<NavBar />
+				<div className={'flex-1'}>
+					<Outlet />
+				</div>
+				<Footer />
 			</div>
-			<Footer />
-		</div>
+		</LoaderContext.Provider>
 	);
 }
 
