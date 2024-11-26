@@ -7,6 +7,7 @@ import Trailers from '~/components/home/Trailers';
 import { GetFreeShow, GetPopularMovies, GetTrendingMovies } from '~/common/api';
 import { TFreeToWatch, TPopularMovie, TTrendingMovie } from '~/tyoes';
 import useCustomFetcher from '~/hooks/useCustomFetcher';
+import { getRandomInt } from '~/lib/utils';
 
 export const meta: MetaFunction = () => {
 	return [
@@ -46,7 +47,13 @@ const Home = ({ loaderData }: Route.ComponentProps) => {
 	return (
 		<div className="mx-auto h-fit w-full max-w-[1320px]">
 			{/*banner*/}
-			<Banner />
+			<Banner
+				path={
+					trendingMovieData.results[
+						getRandomInt(trendingMovieData.results.length)
+					].backdrop_path
+				}
+			/>
 
 			<div className={'flex w-full flex-col gap-7 pt-7'}>
 				<div className="relative">
