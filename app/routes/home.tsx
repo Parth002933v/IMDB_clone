@@ -28,41 +28,52 @@ export async function loader({}: Route.LoaderArgs) {
 		res[1].json() as Promise<TPopularMovie>,
 		res[2].json() as Promise<TFreeToWatch>,
 	]);
+
+	const randomBanner =
+		trendingMovies.results[getRandomInt(trendingMovies.results.length)]
+			.backdrop_path;
+
 	return {
 		trendingMovies,
 		popularMovies,
 		freeToWatch,
+		randomBanner,
 	};
 }
 
 const Home = ({ loaderData }: Route.ComponentProps) => {
-	const { fetcher: trendingMovieFetcher, data: trendingMovieData } =
-		useCustomFetcher<TTrendingMovie>(loaderData.trendingMovies);
+	const {
+		fetcher: trendingMovieFetcher,
+		data: trendingMovieData,
+		fetcherState: trendingMovieFetcherSate,
+	} = useCustomFetcher<TTrendingMovie>(loaderData.trendingMovies);
 
-	const { fetcher: popularMovieFetcher, data: popularMovieData } =
-		useCustomFetcher<TPopularMovie>(loaderData.popularMovies);
+	const {
+		fetcher: popularMovieFetcher,
+		data: popularMovieData,
+		fetcherState: popularMovieFetchState,
+	} = useCustomFetcher<TPopularMovie>(loaderData.popularMovies);
 
-	const { fetcher: freeToWatchMovieFetcher, data: freeToWatchMovieData } =
-		useCustomFetcher<TFreeToWatch>(loaderData.freeToWatch);
+	const {
+		fetcher: freeToWatchMovieFetcher,
+		data: freeToWatchMovieData,
+		fetcherState: freeToWatchFetcherState,
+	} = useCustomFetcher<TFreeToWatch>(loaderData.freeToWatch);
+
 	return (
 		<div className="mx-auto h-fit w-full max-w-[1320px]">
 			{/*banner*/}
-			<Banner
-				path={
-					trendingMovieData.results[
-						getRandomInt(trendingMovieData.results.length)
-					].backdrop_path
-				}
-			/>
+			<Banner path={loaderData.randomBanner} />
 
 			<div className={'flex w-full flex-col gap-7 pt-7'}>
 				<div className="relative">
 					<img
 						alt={'trending-banner'}
 						src="/sample/trending-bg.svg"
-						className="absolute bottom-0 top-36 -z-10 object-cover"
+						className="absolute bottom-0 top-44 -z-10 object-cover"
 					/>
 					<MoviesScrollList
+						LoadingStatus={trendingMovieFetcherSate}
 						key={'trending'}
 						title="Trending"
 						onSelect={value => {
@@ -83,6 +94,7 @@ const Home = ({ loaderData }: Route.ComponentProps) => {
 				<Trailers />
 
 				<MoviesScrollList
+					LoadingStatus={popularMovieFetchState}
 					title="What's Popular"
 					movieList={popularMovieData.results}
 					menuItems={['Streaming', 'On TV', 'For Rent', 'In Theaters']}
@@ -101,6 +113,7 @@ const Home = ({ loaderData }: Route.ComponentProps) => {
 				/>
 
 				<MoviesScrollList
+					LoadingStatus={freeToWatchFetcherState}
 					title="Free To Watch"
 					movieList={freeToWatchMovieData.results}
 					menuItems={['Movies', 'TV']}

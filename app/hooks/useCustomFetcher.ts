@@ -9,6 +9,7 @@ const useCustomFetcher = <T>(intData: T) => {
 
 	let fetcher = useFetcher();
 
+	let fetcherState = fetcher.state;
 	useEffect(() => {
 		if (fetcher.data) {
 			setData(fetcher.data as T);
@@ -25,7 +26,7 @@ const useCustomFetcher = <T>(intData: T) => {
 		}
 	}, [fetcher.state]);
 
-	return { data, fetcher };
+	return { data, fetcher, fetcherState };
 };
 
 export default useCustomFetcher;

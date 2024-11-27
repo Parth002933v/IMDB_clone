@@ -4,9 +4,16 @@ import RoundedProgressBar from '~/components/prgressbar';
 interface MovieCardProps {
 	imgurl?: string;
 	averageVote?: number;
+	movieTitle?: string;
+	releaseDate?: string;
 }
 
-const MovieCard = ({ imgurl = 'as', averageVote = 23 }: MovieCardProps) => {
+const MovieCard = ({
+	imgurl,
+	averageVote = 23,
+	movieTitle = '',
+	releaseDate = '',
+}: MovieCardProps) => {
 	return (
 		<li
 			className={'pointer-events-auto relative cursor-pointer'}
@@ -28,12 +35,12 @@ const MovieCard = ({ imgurl = 'as', averageVote = 23 }: MovieCardProps) => {
 				/>
 			</div>
 
-			<div className="absolute left-4 top-[11.5rem] h-12 w-12">
+			<div className="absolute left-4 top-[11.5rem] mt-8 h-10 w-10">
 				<RoundedProgressBar progress={Math.trunc(averageVote * 10)} />
 			</div>
-			<div className="pt-3">
-				<p className="text-lg font-bold">Day and Night</p>
-				<p className="font-thin">Aug 30, 2017</p>
+			<div className="mt-6">
+				<p className="text-sm font-bold">{movieTitle}</p>
+				<p className="text-gray text-sm font-light">{releaseDate}</p>
 			</div>
 		</li>
 	);

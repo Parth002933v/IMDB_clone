@@ -39,6 +39,7 @@ export const GetPopularMovies = (by: PopularMovieGroupType) => {
 	}
 
 	params.set('watch_region', 'IN');
+	params.set('language', 'en-US');
 	return fetch(`${baseURL}?${params}`, {
 		cache: 'force-cache',
 		headers: {
@@ -54,6 +55,7 @@ export const GetFreeShow = (by: FreeToWatchGroupType) => {
 	const params = new URLSearchParams();
 	params.set('with_watch_monetization_types', 'free');
 	params.set('watch_region', 'IN');
+	params.set('language', 'en-US');
 
 	return fetch(`${baseUrl}?${params.toString()}`, {
 		cache: 'force-cache',

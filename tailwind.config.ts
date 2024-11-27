@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 import tailwindcssAnimate from 'tailwindcss-animate';
 import tailwindScrollbar from 'tailwind-scrollbar';
+import tailwindAspectRatio from '@tailwindcss/aspect-ratio';
 
 export default {
 	darkMode: ['class'],
@@ -69,6 +70,9 @@ export default {
 			//
 		},
 	},
+	corePlugins: {
+		aspectRatio: false,
+	},
 	plugins: [
 		function ({ addUtilities }: { addUtilities: any }) {
 			const newUtilitis = {
@@ -86,5 +90,6 @@ export default {
 
 		tailwindcssAnimate,
 		tailwindScrollbar,
+		tailwindAspectRatio,
 	],
 } satisfies Config;
