@@ -3,9 +3,6 @@ import {
 	isFreeToWatchMovieGroupType,
 	isPopularMovieGroupType,
 	isTrendingMovieGroupType,
-	TFreeToWatch,
-	TPopularMovie,
-	TTrendingMovie,
 } from '~/tyoes';
 import { Route } from '../../../../.react-router/types/app/routes/remote/api/+types/trendingMovies';
 import { data } from 'react-router';
@@ -28,7 +25,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 				throw data('the params is not valid', { status: 400 });
 			} else {
 				const res = await GetTrendingMovies(group);
-				return (await res.json()) as Promise<TTrendingMovie>;
+				return res.data;
+				// return (await res.json()) as Promise<TTrendingMovie>;
 			}
 		}
 
@@ -37,7 +35,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 				throw data('the params is not valid', { status: 400 });
 			} else {
 				const res = await GetPopularMovies(group);
-				return (await res.json()) as Promise<TPopularMovie>;
+				return res.data;
+				// return (await res.json()) as Promise<TPopularMovie>;
 			}
 		}
 
@@ -46,7 +45,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 				throw data('the params is not valid', { status: 400 });
 			} else {
 				const res = await GetFreeShow(group);
-				return (await res.json()) as Promise<TFreeToWatch>;
+				// return (await res.json()) as Promise<TFreeToWatch>;
+				return res.data;
 			}
 		}
 

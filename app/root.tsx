@@ -5,18 +5,18 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
+	useNavigation,
 } from 'react-router';
-import type { LinksFunction } from 'react-router';
 
 import './app.css';
 import NavBar from '~/components/navbar';
 import Footer from '~/components/footer';
 import { Route } from '../.react-router/types/app/+types/root';
-import LoadingBar, { IProps, LoadingBarRef } from 'react-top-loading-bar';
-import { useRef } from 'react';
-import { LoaderContext } from '~/hooks/useLoader';
+import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
+import React, { useEffect, useRef } from 'react';
+import { LoaderContext, useLoader } from '~/hooks/useLoader';
 
-export const links: LinksFunction = () => [
+export const links: Route.LinksFunction = () => [
 	{ rel: 'preconnect', href: 'https://fonts.googleapis.com' },
 	{
 		rel: 'preconnect',
@@ -47,6 +47,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	);
 }
 
+// export default function App() {
+// 	return <Outlet />;
+// }
 export default function App() {
 	const loaderRef = useRef<LoadingBarRef | null>(null);
 
@@ -64,31 +67,27 @@ export default function App() {
 	);
 }
 
+
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	let message = 'Oops!';
-	let details = 'An unexpected error occurred.';
-	let stack: string | undefined;
-
 	if (isRouteErrorResponse(error)) {
-		message = error.status === 404 ? '404' : 'Error';
-		details =
-			error.status === 404
-				? 'The requested page could not be found.'
-				: error.statusText || details;
-	} else if (import.meta.env.DEV && error && error instanceof Error) {
-		details = error.message;
-		stack = error.stack;
+		return (
+			<>
+				<h1>
+					{error.status} {error.statusText}
+				</h1>
+				<p>{error.data}</p>
+			</>
+		);
+	} else if (error instanceof Error) {
+		return (
+			<div>
+				<h1>Error</h1>
+				<p>{error.message}</p>
+				<p>The stack trace is:</p>
+				<pre>{error.stack}</pre>
+			</div>
+		);
+	} else {
+		return <h1>Unknown Error</h1>;
 	}
-
-	return (
-		<main className="container mx-auto p-4 pt-16">
-			<h1>{message}</h1>
-			<p>{details}</p>
-			{stack && (
-				<pre className="w-full overflow-x-auto p-4">
-					<code>{stack}</code>
-				</pre>
-			)}
-		</main>
-	);
 }

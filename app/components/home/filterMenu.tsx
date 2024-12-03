@@ -17,7 +17,7 @@ const FilterMenu = <T extends string>({
 	darkTheme = false,
 	onClick,
 }: FilterMenuProps<T>) => {
-	const { isOpen, toggleIsOpen } = useToggle(true);
+	const { isOpen, toggleIsOpen } = useToggle(false);
 
 	const [selectedOption, setSelectedOption] = useState(menuOptions[0]);
 

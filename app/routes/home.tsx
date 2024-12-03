@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Route } from '../../.react-router/types/app/routes/+types/home';
-import { MetaFunction } from 'react-router';
+import { isRouteErrorResponse, MetaFunction } from 'react-router';
 import MoviesScrollList from '~/components/home/moviesScrollList';
 import Banner from '~/components/home/banner';
 import Trailers from '~/components/home/Trailers';
 import { GetFreeShow, GetPopularMovies, GetTrendingMovies } from '~/common/api';
-import { TFreeToWatch, TPopularMovie, TTrendingMovie } from '~/tyoes';
+import { isMovieData, TFreeToWatch, TMovieTV, TTrendingMovieTV } from '~/tyoes';
 import useCustomFetcher from '~/hooks/useCustomFetcher';
 import { getRandomInt } from '~/lib/utils';
 
@@ -16,49 +16,70 @@ export const meta: MetaFunction = () => {
 	];
 };
 
-export async function loader({}: Route.LoaderArgs) {
-	const res = await Promise.all([
-		GetTrendingMovies('day'),
-		GetPopularMovies('streaming'),
-		GetFreeShow('movie'),
-	]);
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+	if (isRouteErrorResponse(error)) {
+		return (
+			<>
+				<h1>
+					{error.status} {error.statusText}
+				</h1>
+				<p>{error.data}</p>
+			</>
+		);
+	} else if (error instanceof Error) {
+		return (
+			<div>
+				<h1>Error</h1>
+				<p>{error.message}</p>
+				<p>The stack trace is:</p>
+				<pre>{error.stack}</pre>
+			</div>
+		);
+	} else {
+		return <h1>Unknown Error</h1>;
+	}
+}
 
-	const [trendingMovies, popularMovies, freeToWatch] = await Promise.all([
-		res[0].json() as Promise<TTrendingMovie>,
-		res[1].json() as Promise<TPopularMovie>,
-		res[2].json() as Promise<TFreeToWatch>,
-	]);
+export async function loader({ request }: Route.LoaderArgs) {
+	const trendingMovies = await GetTrendingMovies('day');
+	const popularMovies = await GetPopularMovies('streaming');
+	const freeToWatch = await GetFreeShow('movie');
 
 	const randomBanner =
-		trendingMovies.results[getRandomInt(trendingMovies.results.length)]
+		trendingMovies.data.results[getRandomInt(trendingMovies.data.results.length)]
 			.backdrop_path;
 
 	return {
-		trendingMovies,
-		popularMovies,
-		freeToWatch,
+		trendingMovies: trendingMovies.data,
+		popularMovies: popularMovies.data,
+		freeToWatch: freeToWatch.data,
 		randomBanner,
 	};
 }
 
+function sleep(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const Home = ({ loaderData }: Route.ComponentProps) => {
+	const SerachRef = useRef(null);
 	const {
 		fetcher: trendingMovieFetcher,
 		data: trendingMovieData,
 		fetcherState: trendingMovieFetcherSate,
-	} = useCustomFetcher<TTrendingMovie>(loaderData.trendingMovies);
+	} = useCustomFetcher<TTrendingMovieTV>(loaderData.trendingMovies);
 
 	const {
 		fetcher: popularMovieFetcher,
 		data: popularMovieData,
 		fetcherState: popularMovieFetchState,
-	} = useCustomFetcher<TPopularMovie>(loaderData.popularMovies);
+	} = useCustomFetcher<TMovieTV>(loaderData.popularMovies);
 
 	const {
 		fetcher: freeToWatchMovieFetcher,
 		data: freeToWatchMovieData,
 		fetcherState: freeToWatchFetcherState,
-	} = useCustomFetcher<TFreeToWatch>(loaderData.freeToWatch);
+	} = useCustomFetcher<TMovieTV>(loaderData.freeToWatch);
 
 	return (
 		<div className="mx-auto h-fit w-full max-w-[1320px]">
@@ -97,6 +118,7 @@ const Home = ({ loaderData }: Route.ComponentProps) => {
 					LoadingStatus={popularMovieFetchState}
 					title="What's Popular"
 					movieList={popularMovieData.results}
+					navigateParam="movie"
 					menuItems={['Streaming', 'On TV', 'For Rent', 'In Theaters']}
 					onSelect={value => {
 						const param = new URLSearchParams();
@@ -115,6 +137,7 @@ const Home = ({ loaderData }: Route.ComponentProps) => {
 				<MoviesScrollList
 					LoadingStatus={freeToWatchFetcherState}
 					title="Free To Watch"
+					navigateParam={isMovieData(freeToWatchMovieData.results[0]) ? "movie" : "tv"}
 					movieList={freeToWatchMovieData.results}
 					menuItems={['Movies', 'TV']}
 					onSelect={value => {

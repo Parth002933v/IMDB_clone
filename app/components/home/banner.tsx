@@ -1,4 +1,6 @@
 import React from 'react';
+import { ForkKnife } from 'lucide-react';
+import { Form } from 'react-router';
 
 const Banner = ({ path }: { path?: string }) => {
 	return (
@@ -19,13 +21,17 @@ const Banner = ({ path }: { path?: string }) => {
 				</p>
 
 				<div className="relative mt-9 flex h-12 items-center overflow-hidden rounded-full bg-white active:outline active:outline-[#03b6e2]">
-					<input
-						className="w-full border-none pl-5 pr-32 text-lg text-black placeholder-black/80 outline-0"
-						placeholder={'Search for movie,tv shows, person...'}
-					/>
-					<button className="absolute bottom-0 right-0 top-0 rounded-full bg-gradient-to-r from-[#1cd3ad] to-[#03b6e2] px-8 duration-300 hover:text-black">
-						Search
-					</button>
+					<Form action={`./search`} method="GET" className="w-full">
+						<input
+							id="home-search-input"
+							name="query"
+							className="w-full border-none pl-5  pr-32 text-lg text-black placeholder-black/80 outline-0"
+							placeholder={'Search for movie,tv shows, person...'}
+						/>
+						<button className="absolute bottom-0 right-0 top-0 rounded-full bg-gradient-to-r from-[#1cd3ad] to-[#03b6e2] px-8 duration-300 hover:text-black">
+							Search
+						</button>
+					</Form>
 				</div>
 			</div>
 		</div>

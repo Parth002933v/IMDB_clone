@@ -1,11 +1,13 @@
 import React from 'react';
 import FilterMenu from '~/components/home/filterMenu';
 import MovieCard from '~/components/movieCard';
-import { TrendingMovieData, PopularMovieData } from '~/tyoes';
+import { BaseMovieTV, BaseTrendingMovieTV, isMovieData } from '~/tyoes';
 import { twMerge } from 'tailwind-merge';
+import { Link } from 'react-router';
 
 interface TrendingProps<T extends string> {
-	movieList: TrendingMovieData[] | PopularMovieData[];
+	movieList: BaseTrendingMovieTV[] | BaseMovieTV[];
+	navigateParam?: 'movie' | 'tv';
 	title: string;
 	menuItems: T[];
 	onSelect?: (value: T) => void;
@@ -18,6 +20,7 @@ const MoviesScrollList = <T extends string>({
 	menuItems,
 	onSelect,
 	LoadingStatus,
+	navigateParam,
 }: TrendingProps<T>) => {
 	return (
 		<div className="relative">
@@ -34,19 +37,26 @@ const MoviesScrollList = <T extends string>({
 						LoadingStatus === 'loading' && 'z-[1] block bg-gray-400 opacity-50'
 					)}
 				></div>
-				<ul className="relative flex h-full w-full gap-5 overflow-x-auto pb-9 pl-6 scrollbar scrollbar-track-transparent scrollbar-thumb-gray-100">
+				<ul className="relative flex h-full w-full gap-5 overflow-x-auto pb-9 pl-6 duration-300 scrollbar scrollbar-track-transparent scrollbar-thumb-gray-100">
 					{movieList.map((data, i) => (
-						<MovieCard
+						<Link
+							to={`/${isMovieData(data) ? 'movie' : 'tv'}/${data.id}-${isMovieData(data) ? `${data.title.replaceAll(' ', '-')}` : `${data.name.replaceAll(' ', '-')}`}`}
+							// to={`/${navigateParam ? navigateParam : data.media_type}/${data.id}`}
 							key={data.id}
-							imgurl={data.poster_path}
-							// @ts-ignore
-							movieTitle={data.name || data.title}
-							// @ts-ignore
-							releaseDate={data.first_air_date || data.release_date}
-							averageVote={data.vote_average}
-						/>
+						>
+							<MovieCard
+								key={data.id}
+								imgurl={data.poster_path}
+								movieTitle={isMovieData(data) ? data.title : data.name}
+								releaseDate={
+									isMovieData(data)
+										? data.release_date
+										: data.first_air_date
+								}
+								averageVote={data.vote_average}
+							/>
+						</Link>
 					))}
-					{/*<MovieCard />*/}
 				</ul>
 			</div>
 		</div>
