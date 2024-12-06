@@ -4,8 +4,8 @@ import { isRouteErrorResponse, MetaFunction } from 'react-router';
 import MoviesScrollList from '~/components/home/moviesScrollList';
 import Banner from '~/components/home/banner';
 import Trailers from '~/components/home/Trailers';
-import { GetFreeShow, GetPopularMovies, GetTrendingMovies } from '~/common/api';
-import { isMovieData, TFreeToWatch, TMovieTV, TTrendingMovieTV } from '~/tyoes';
+import { GetFreeShow, GetPopularMovies, GetTrendingMovies } from '~/lib/api';
+import { isMovieData, TMovieTV, TTrendingMovieTV } from '~/tyoes';
 import useCustomFetcher from '~/hooks/useCustomFetcher';
 import { getRandomInt } from '~/lib/utils';
 
@@ -137,7 +137,9 @@ const Home = ({ loaderData }: Route.ComponentProps) => {
 				<MoviesScrollList
 					LoadingStatus={freeToWatchFetcherState}
 					title="Free To Watch"
-					navigateParam={isMovieData(freeToWatchMovieData.results[0]) ? "movie" : "tv"}
+					navigateParam={
+						isMovieData(freeToWatchMovieData.results[0]) ? 'movie' : 'tv'
+					}
 					movieList={freeToWatchMovieData.results}
 					menuItems={['Movies', 'TV']}
 					onSelect={value => {

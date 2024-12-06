@@ -1,4 +1,4 @@
-import { GetFreeShow, GetPopularMovies, GetTrendingMovies } from '~/common/api';
+import { GetFreeShow, GetPopularMovies, GetTrendingMovies } from '~/lib/api';
 import {
 	isFreeToWatchMovieGroupType,
 	isPopularMovieGroupType,
@@ -9,7 +9,7 @@ import { data } from 'react-router';
 
 export async function loader({ request }: Route.LoaderArgs) {
 	const url = new URL(request.url);
-	console.log(url.href);
+	// console.log(url.href);
 
 	const searchParam = url.searchParams;
 	const panel = searchParam.get('panel');

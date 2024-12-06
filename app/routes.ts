@@ -4,7 +4,8 @@ export default [
 	index('./routes/home.tsx'),
 	route('remote/panel', './routes/remote/api/trendingMovies.tsx'),
 	route(':mediaType/:id', './routes/mediaDetail.tsx'),
-
+	route('login', './routes/auth/login.tsx'),
+	route('logout', './routes/auth/logout.tsx'),
 	// route('tv/:id', './routes/detail/detail_tv.tsx'),
 
 	route('search', './routes/search/search.tsx', [
@@ -14,3 +15,5 @@ export default [
 		route('person', './routes/search/search_people.tsx'),
 	]),
 ] satisfies RouteConfig;
+// Disclaimer
+// This website is a clone created for educational purposes only. It is not intended for actual use, and while you may choose to interact with it, we do not recommend using it for any critical or real-world applications. Any similarity to the TMDB website is purely for learning purposes. Use at your own discretion.

@@ -19,9 +19,9 @@ const Index = ({ matches }: Route.ComponentProps) => {
 	if (outlet.mediaType[0] == 'movie') {
 		return <MovieSearchComponent outlet={outlet.data.searchedMovies} />;
 	} else if (outlet.mediaType[0] == 'tv') {
-		return <TVSearchComponent outlet={outlet.data.searchedTVShows.results} />;
+		return <TVSearchComponent outlet={outlet.data.searchedTVShows} />;
 	} else if (outlet.mediaType[0] == 'person') {
-		return <PeopleSearchComponent outlet={outlet.data.searchedPersons.results} />;
+		return <PeopleSearchComponent outlet={outlet.data.searchedPersons} />;
 	}
 	return <div>index</div>;
 };

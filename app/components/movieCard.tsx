@@ -17,9 +17,6 @@ const MovieCard = ({
 	return (
 		<li
 			className={'pointer-events-auto relative cursor-pointer'}
-			onClick={() => {
-				console.log('clicked');
-			}}
 		>
 			<div
 				className={'relative h-60 w-[9.5rem] overflow-hidden rounded-lg shadow'}

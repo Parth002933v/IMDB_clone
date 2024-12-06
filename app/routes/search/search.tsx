@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { IoSearchSharp } from 'react-icons/io5';
 import { IoMdClose } from 'react-icons/io';
 import { data, Form, NavLink, Outlet } from 'react-router';
 import { formatMediaType } from '~/lib/utils';
-import { GetSearchResult } from '~/common/api';
+import { GetSearchResult } from '~/lib/api';
 import { TMovieSearch, TMultiSearch, TPersonSearch, TTVShowsSearch } from '~/tyoes';
 import { twMerge } from 'tailwind-merge';
 import { Route } from '../../../.react-router/types/app/routes/search/+types/search';
@@ -25,8 +25,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 	);
 
 	const searchedMovies = await GetSearchResult<TMovieSearch>(q, 'movie', pageNo);
-	const searchedTVShows = await GetSearchResult<TTVShowsSearch>(q, 'tv',pageNo);
-	const searchedPersons = await GetSearchResult<TPersonSearch>(q, 'person',pageNo);
+	const searchedTVShows = await GetSearchResult<TTVShowsSearch>(q, 'tv', pageNo);
+	const searchedPersons = await GetSearchResult<TPersonSearch>(q, 'person', pageNo);
 
 	return data({
 		data: {
@@ -142,6 +142,13 @@ interface SearchBarProps {
 }
 
 const SearchBar = ({ setInput, input }: SearchBarProps) => {
+	const inputRef = useRef<HTMLInputElement>(null);
+	const handleClear = () => {
+		if (inputRef.current) {
+			inputRef.current.value = '';
+			inputRef.current.focus();
+		}
+	};
 	return (
 		<Form
 			action="#"
@@ -150,13 +157,14 @@ const SearchBar = ({ setInput, input }: SearchBarProps) => {
 		>
 			<IoSearchSharp className="h-4 w-4" />
 			<input
+				ref={inputRef}
 				name="query"
 				value={input}
 				onChange={e => setInput(e.target.value)}
 				className="h-full flex-1 font-semibold text-gray-500 outline-none placeholder:text-sm placeholder:italic"
 				placeholder="Serach"
 			/>
-			<button type="button" className="p-1 active:bg-gray-500/10">
+			<button onClick={handleClear} type="button" className="p-1 active:bg-gray-500/10">
 				<IoMdClose className="font-bold text-gray-600" />
 			</button>
 		</Form>

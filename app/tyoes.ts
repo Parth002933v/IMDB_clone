@@ -1,3 +1,18 @@
+import { z } from 'zod';
+
+export type ApiError = {
+	statusCode?: number;
+	status_message: string;
+	detail?: any;
+};
+
+export const TApiErrorSchema = z.object({
+	success: z.boolean(),
+	status_code: z.number(),
+	status_message: z.string(),
+});
+export type TApiError = z.infer<typeof  TApiErrorSchema>
+
 export interface PaginatedResponse<T> {
 	page: number;
 	results: T[];
@@ -5,51 +20,51 @@ export interface PaginatedResponse<T> {
 	total_results: number;
 }
 
-export interface TrendingMovieData extends BaseMovieData {
-	name: string;
-	original_name: string;
-	media_type: string;
-	first_air_date?: string;
-	origin_country?: string[];
-}
+// export interface TrendingMovieData extends BaseMovieData {
+// 	name: string;
+// 	original_name: string;
+// 	media_type: string;
+// 	first_air_date?: string;
+// 	origin_country?: string[];
+// }
+//
+// export interface PopularMovieData extends BaseMovieData {
+// 	original_title: string;
+// 	release_date?: string;
+// 	title: string;
+// 	video: boolean;
+// }
+//
+// export interface FreeToWatchMovieData extends BaseMovieData {
+// 	original_title: string;
+// 	release_date: string;
+// 	title: string;
+// 	video: boolean;
+// }
+//
+// export interface FreeToWatchTVData extends BaseMovieData {
+// 	origin_country: string[];
+// 	original_name: string;
+// 	first_air_date: string;
+// 	name: string;
+// }
+//
+// interface BaseMovieData {
+// 	id: number;
+// 	adult: boolean;
+// 	backdrop_path?: string;
+// 	genre_ids: number[];
+// 	original_language: string;
+// 	overview: string;
+// 	popularity: number;
+// 	poster_path?: string;
+// 	vote_average: number;
+// 	vote_count: number;
+// }
 
-export interface PopularMovieData extends BaseMovieData {
-	original_title: string;
-	release_date?: string;
-	title: string;
-	video: boolean;
-}
-
-export interface FreeToWatchMovieData extends BaseMovieData {
-	original_title: string;
-	release_date: string;
-	title: string;
-	video: boolean;
-}
-
-export interface FreeToWatchTVData extends BaseMovieData {
-	origin_country: string[];
-	original_name: string;
-	first_air_date: string;
-	name: string;
-}
-
-interface BaseMovieData {
-	id: number;
-	adult: boolean;
-	backdrop_path?: string;
-	genre_ids: number[];
-	original_language: string;
-	overview: string;
-	popularity: number;
-	poster_path?: string;
-	vote_average: number;
-	vote_count: number;
-}
-
-export type TTrendingMovie = PaginatedResponse<TrendingMovieData>;
-export type TPopularMovie = PaginatedResponse<PopularMovieData>;
-export type TFreeToWatch = PaginatedResponse<FreeToWatchMovieData>;
+// export type TTrendingMovie = PaginatedResponse<TrendingMovieData>;
+// export type TPopularMovie = PaginatedResponse<PopularMovieData>;
+// export type TFreeToWatch = PaginatedResponse<FreeToWatchMovieData>;
 
 export type PopularMovieGroupType =
 	| 'streaming'
@@ -441,3 +456,49 @@ export function isMovieData(obj: BaseMovieTV): obj is BaseMovieTV & MovieData {
 }
 
 export type TMovieTV = PaginatedResponse<BaseMovieTV>;
+
+//================================Auth==================================================================================
+const TRequestTokenSchema = z.object({
+	success: z.boolean(),
+	expires_at: z.string(), // You may want to add a check for date format if necessary
+	request_token: z.string(),
+});
+export type TRequestToken = z.infer<typeof TRequestTokenSchema>;
+
+export const TSessionErrorSchema = z.object({
+	success: z.literal(false),
+	failure: z.boolean(),
+	status_code: z.number(),
+	status_message: z.string(),
+});
+
+const TSessionSuccessSchema = z.object({
+	success: z.literal(true),
+	session_id: z.string(),
+});
+
+// const TSessionSchema = z.union([TSessionSuccessSchema, TSessionErrorSchema]);
+export type TSessionSuccess = z.infer<typeof TSessionSuccessSchema>;
+
+export interface TProfile {
+	avatar: Avatar;
+	id: number;
+	iso_639_1: string;
+	iso_3166_1: string;
+	name: string;
+	include_adult: boolean;
+	username: string;
+}
+
+export interface Avatar {
+	gravatar: Gravatar;
+	tmdb: Tmdb;
+}
+
+export interface Gravatar {
+	hash: string;
+}
+
+export interface Tmdb {
+	avatar_path: string | null;
+}

@@ -36,13 +36,11 @@ const PaginatedNumberButton = ({
 interface PaginatedComponentProps {
 	currentPage?: number;
 	totalPages: number;
-	onClick: (pageNo: number) => void;
 }
 
 const PaginatedComponent = ({
 	currentPage = 1,
 	totalPages,
-	onClick,
 }: PaginatedComponentProps) => {
 	const [searchParams, setSearchParams] = useSearchParams();
 
@@ -96,7 +94,7 @@ const PaginatedComponent = ({
 					else if (totalPages <= 5) {
 						return (
 							<>
-								{generateNumbers(5).map(i => (
+								{generateNumbers(totalPages).map(i => (
 									<PaginatedNumberButton
 										isSelected={currentPage == i}
 										key={i}

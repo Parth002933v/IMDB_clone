@@ -1,7 +1,7 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import RoundedProgressBar from '~/components/prgressbar';
-import { GetCastCrewByMovieId, GetMovieTVById } from '~/common/api';
+import { GetCastCrewByMovieId, GetMovieTVById } from '~/lib/api';
 import { convertMinutes, filterCrewByJobs } from '~/lib/utils';
 import { FaArrowRightLong } from 'react-icons/fa6';
 import { data, isRouteErrorResponse } from 'react-router';
@@ -40,7 +40,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 		throw data('not page found', { status: 404 });
 	}
 
-	console.log('========', params, '=========');
 	const MovieId = params.id.split('-')[0];
 
 	const movieDetail = await GetMovieTVById(MovieId, params.mediaType);
@@ -49,9 +48,9 @@ export async function loader({ params }: Route.LoaderArgs) {
 	const pagginatedCast = CastCrew.data.cast.slice(0, 10);
 	const importantCrews = filterCrewByJobs(CastCrew.data.crew);
 
-	const fullImage = `https://media.themoviedb.org/t/p/w300_and_h450_bestv2${movieDetail.data.backdrop_path}`;
+	// const fullImage = `https://media.themoviedb.org/t/p/w300_and_h450_bestv2${movieDetail.data.backdrop_path}`;
 
-	console.log(fullImage);
+	// console.log(fullImage);
 
 	// Function to extract the primary color from an image
 	async function getPrimaryColor(imageUrl: string) {
@@ -74,7 +73,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 	return data({
 		movieDetail: movieDetail.data,
-		pagginatedCast: pagginatedCast,
+		paginatedCast: pagginatedCast,
 		importantCrews: importantCrews,
 		colorPalette: '',
 	});
@@ -133,7 +132,7 @@ const toHex = (rgb: any) => {
 };
 
 const MediaDetail = ({ loaderData }: Route.ComponentProps) => {
-	const { movieDetail, importantCrews, pagginatedCast, colorPalette } = loaderData;
+	const { movieDetail, importantCrews, paginatedCast, colorPalette } = loaderData;
 
 	const isMovie = isMovieDetail(movieDetail);
 
@@ -174,22 +173,16 @@ const MediaDetail = ({ loaderData }: Route.ComponentProps) => {
 			<div
 				key="banner"
 				className={twMerge(`relative`)}
-				style={
-					{
-						// backgroundColor: `rgb(${colorPalette.primary})`,
-					}
-				}
+
 			>
 				<div className="h-full w-[100vw] min-w-[100vw]">
 					<div className="relative h-[calc(100vw/2.222222)] w-full min-w-[100vw] overflow-hidden">
 						<div
 							className={twMerge(
 								'h-full w-full min-w-full bg-cover bg-no-repeat',
-								'bg-[calc((((100vw/2.222222)-20px)/1.5)/2)_0]'
+								'bg-[calc((((100vw/2.222222)-20px)/1.5)/2)_0]',
+								`url('https://media.themoviedb.org/t/p/w1000_and_h450_multi_faces${movieDetail.backdrop_path}')`
 							)}
-							style={{
-								backgroundImage: `url('https://media.themoviedb.org/t/p/w1000_and_h450_multi_faces${movieDetail.backdrop_path}')`,
-							}}
 						>
 							<div className="absolute left-0 top-0 h-full w-full bg-[linear-gradient(to_right,rgba(10.5,31.5,52.5,1)_20%,rgba(10.5,31.5,52.5,0)_50%)]" />
 							<div className="absolute inset-0 bg-slate-700 opacity-50" />
@@ -285,10 +278,10 @@ const MediaDetail = ({ loaderData }: Route.ComponentProps) => {
 			<div className="w-full space-y-3 pb-5 pt-10">
 				<span className="text-l pl-5 font-semibold">Top Billed Cast</span>
 				<div className="flex w-full gap-x-4 overflow-auto pb-3 pl-5">
-					{pagginatedCast.map((d, i) => (
+					{paginatedCast.map((d, i) => (
 						<div
 							key={d.id}
-							className=" flex flex-col h-60  rounded-lg shadow-md  w-[125px]"
+							className="flex h-60 w-[125px] flex-col rounded-lg shadow-md"
 						>
 							<div className="h-[7.3rem] w-full overflow-hidden rounded-tl-lg rounded-tr-lg">
 								<FallbackImage
@@ -301,7 +294,7 @@ const MediaDetail = ({ loaderData }: Route.ComponentProps) => {
 								/>
 							</div>
 
-							<p className="px-2 pt-1 w-full">
+							<p className="w-full px-2 pt-1">
 								<div className="font-medium">{d.original_name}</div>
 								<div className="text-sm">
 									{d.character}

@@ -62,10 +62,6 @@ export function MovieSearchComponent({ outlet }: { outlet: TMovieSearch }) {
 				<PaginatedComponent
 					currentPage={outlet.page}
 					totalPages={outlet.total_pages}
-					onClick={(pageNo: number) => {
-						console.log(pageNo);
-
-					}}
 				/>
 			</div>
 		</>

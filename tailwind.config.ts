@@ -3,9 +3,14 @@ import tailwindcssAnimate from 'tailwindcss-animate';
 import tailwindScrollbar from 'tailwind-scrollbar';
 import tailwindAspectRatio from '@tailwindcss/aspect-ratio';
 
+import flowbite from 'flowbite-react/tailwind';
+
 export default {
 	darkMode: ['class'],
-	content: ['./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}'],
+	content: [
+		'./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}',
+		flowbite.content(),
+	],
 	theme: {
 		extend: {
 			fontFamily: {
@@ -91,5 +96,6 @@ export default {
 		tailwindcssAnimate,
 		tailwindScrollbar,
 		tailwindAspectRatio,
+		flowbite.plugin(),
 	],
 } satisfies Config;
