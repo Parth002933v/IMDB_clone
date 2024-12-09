@@ -205,7 +205,7 @@ const ProfileComponent = ({ profileData }: ProfileComponentProps) => {
 			<OptionButton link={'#'} lable={'Settings'} />
 
 			<hr className="h-0.5 w-full bg-gray-400" />
-			<OptionButton link={'#'} lable={'Logout'} />
+			<OptionButton link={'/logout'} lable={'Logout'} />
 		</div>
 	);
 
@@ -220,7 +220,7 @@ const ProfileComponent = ({ profileData }: ProfileComponentProps) => {
 				<button
 					className={twMerge(
 						`relative flex h-9 w-9 place-content-center items-center justify-center overflow-hidden rounded-full text-xs font-semibold text-white`
-
+						,!profileData &&'md:hidden'
 					)}
 				>
 					<div key="not-login" className={twMerge('w-full h-full  bg-black',profileData ? 'hidden':'block md:hidden ')}>

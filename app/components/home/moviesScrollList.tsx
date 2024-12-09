@@ -40,6 +40,7 @@ const MoviesScrollList = <T extends string>({
 				<ul className="relative flex h-full w-full gap-5 overflow-x-auto pb-9 pl-6 duration-300 scrollbar scrollbar-track-transparent scrollbar-thumb-gray-100">
 					{movieList.map((data, i) => (
 						<Link
+							viewTransition
 							to={`/${isMovieData(data) ? 'movie' : 'tv'}/${data.id}-${isMovieData(data) ? `${data.title.replaceAll(' ', '-')}` : `${data.name.replaceAll(' ', '-')}`}`}
 							// to={`/${navigateParam ? navigateParam : data.media_type}/${data.id}`}
 							key={data.id}

@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { TCastCrew } from '~/tyoes';
+import { TCastCrew, TWatchProvider } from '~/tyoes';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -73,3 +73,7 @@ export function generateNumbers(n :number): number[] {
 	}
 	return numbers;
 }
+
+export const localWatchProvider = (lcoal: string, watchProvider: TWatchProvider) => {
+	return watchProvider.results;
+};

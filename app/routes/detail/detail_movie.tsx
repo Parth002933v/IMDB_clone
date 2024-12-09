@@ -1,12 +1,10 @@
 import React from 'react';
+import { Route } from '../../../.react-router/types/app/routes/detail/+types/detail_movie';
 import { GetCastCrewByMovieId, GetMovieTVById, GetWatchProvider } from '~/lib/api';
-import { filterCrewByJobs, localWatchProvider } from '~/lib/utils';
-import { Route } from '../../../.react-router/types/app/routes/detail/+types/detail_tv';
+import { filterCrewByJobs } from '~/lib/utils';
 import { data } from 'react-router';
 import DetailBanner from '~/components/movie_tv_detail/detailBanner';
 import CastCrew from '~/components/movie_tv_detail/CastCrews';
-import { FaBookmark, FaList, FaStar } from 'react-icons/fa';
-import { MdFavorite } from 'react-icons/md';
 import WatchProvider from '~/components/movie_tv_detail/watchProvider';
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -17,13 +15,13 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 	const MovieId = params.id.split('-')[0];
 
-	const movieDetail = await GetMovieTVById(MovieId, 'tv');
-	const CastCrew = await GetCastCrewByMovieId(MovieId, 'tv');
+	const movieDetail = await GetMovieTVById(MovieId, 'movie');
+	const CastCrew = await GetCastCrewByMovieId(MovieId, 'movie');
 
 	const pagginatedCast = CastCrew.data.cast.slice(0, 10);
 	const importantCrews = filterCrewByJobs(CastCrew.data.crew);
 
-	const watchProvider = await GetWatchProvider('tv', MovieId);
+	const watchProvider = await GetWatchProvider('movie', MovieId);
 	// const fullImage = `https://media.themoviedb.org/t/p/w300_and_h450_bestv2${movieDetail.data.backdrop_path}`;
 
 	// console.log(fullImage);
@@ -56,7 +54,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 	});
 }
 
-const TvDetail = ({ loaderData }: Route.ComponentProps) => {
+const MovieDetail = ({ loaderData }: Route.ComponentProps) => {
 	const {
 		movieDetail,
 		watchProvider,
@@ -64,10 +62,6 @@ const TvDetail = ({ loaderData }: Route.ComponentProps) => {
 		paginatedCast,
 		colorPalette,
 	} = loaderData;
-	//
-	// if (!isMovie) return <>is is not movie</>;
-	//
-	// const runtime = `${convertMinutes(movieDetail.runtime).hours}h ${convertMinutes(movieDetail.runtime).minutes}m`;
 	return (
 		<div className="h-full w-full">
 			<DetailBanner data={movieDetail} importantCrews={importantCrews} provider={watchProvider.results.IN.flatrate[0]}/>
@@ -83,4 +77,4 @@ const TvDetail = ({ loaderData }: Route.ComponentProps) => {
 	);
 };
 
-export default TvDetail;
+export default MovieDetail;

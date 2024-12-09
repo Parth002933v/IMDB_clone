@@ -10,7 +10,7 @@ import {
 	TrendingMovieGroupType,
 	TRequestToken,
 	TSessionSuccess,
-	TTrendingMovieTV,
+	TTrendingMovieTV, TWatchProvider,
 } from '~/tyoes';
 import { axios } from '~/lib/apiHandler';
 import { BASE_URL } from '~/lib/constant';
@@ -68,7 +68,7 @@ export const GetMovieTVById = (id: string, mediaType: 'movie' | 'tv') => {
 };
 
 export const GetCastCrewByMovieId = (movieId: string, mediaType: 'movie' | 'tv') => {
-	const baseUrl = `${BASE_URL}/${mediaType}/${movieId}/credits`;
+	const baseUrl = `${BASE_URL}/${mediaType}/${movieId}/${mediaType === 'tv' ? 'aggregate_credits' : 'credits'}`;
 	const param = new URLSearchParams();
 	param.set('language', 'en-US');
 
@@ -113,10 +113,10 @@ export const logout = (session_id: string) => {
 	const baseurl = `${BASE_URL}/authentication/session`;
 
 	const Credentials = {
-		session_id: session_id
+		session_id: session_id,
 	};
 	return axios.delete(baseurl, {
-		data: Credentials
+		data: Credentials,
 	});
 };
 
@@ -135,4 +135,10 @@ export const GetUserDetails = () => {
 	// params.set('session_id', session_id);
 
 	return axios.get<TProfile | undefined>(`${baseUrl}`);
+};
+
+export const GetWatchProvider = (mediaType: 'tv' | 'movie', mediaID: string) => {
+	const baseUrl = `${BASE_URL}/${mediaType}/${mediaID}/watch/providers`;
+
+	return axios.get<TWatchProvider>(baseUrl);
 };

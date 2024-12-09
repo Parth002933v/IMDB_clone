@@ -35,17 +35,17 @@ export const links: Route.LinksFunction = () => [
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
-		<head>
-			<meta charSet="utf-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1" />
-			<Meta />
-			<Links />
-		</head>
-		<body>
-		{children}
-		<ScrollRestoration />
-		<Scripts />
-		</body>
+			<head>
+				<meta charSet="utf-8" />
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<Meta />
+				<Links />
+			</head>
+			<body>
+				{children}
+				<ScrollRestoration />
+				<Scripts />
+			</body>
 		</html>
 	);
 }
@@ -61,7 +61,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export async function loader({ request }: Route.LoaderArgs) {
 	const cookieSession = await cookieSessionStorage.getSession(
-		request.headers.get('Cookie'),
+		request.headers.get('Cookie')
 	);
 
 	const id = axios.interceptors.request.use(async config => {
@@ -70,14 +70,14 @@ export async function loader({ request }: Route.LoaderArgs) {
 		config.url = url.toString();
 		return config;
 	});
-	console.log(
-		'loader in navbar',
-		cookieSession.get('session_id'),
-		'====loader in navbar'
-	);
+	// console.log(
+	// 	'loader in navbar',
+	// 	cookieSession.get('session_id'),
+	// 	'====loader in navbar'
+	// );
 
 	const profileDetail = await GetUserDetails();
-	console.log('profileDetail', profileDetail.data, 'profileDetail');
+	// console.log('profileDetail', profileDetail, 'profileDetail');
 
 	//
 	// const unAuthorizedRequestError = TApiErrorSchema.safeParse(profileDetail.data);
@@ -112,7 +112,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	const APIError = TApiErrorSchema.safeParse(error || "");
+	const APIError = TApiErrorSchema.safeParse(error || '');
 	if (APIError.success) {
 		return (
 			<div className="flex min-h-screen items-center justify-center bg-gray-100 p-6">
@@ -120,7 +120,9 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 					<h1 className="mb-4 text-4xl font-bold text-red-600">
 						Error {APIError.data.status_code}
 					</h1>
-					<h2 className="mb-4 text-xl text-gray-700">{APIError.data.status_message}</h2>
+					<h2 className="mb-4 text-xl text-gray-700">
+						{APIError.data.status_message}
+					</h2>
 					{/*<p className="mb-6 text-lg text-gray-600">{APIError.data.}</p>*/}
 
 					<div className="flex justify-center">
@@ -133,28 +135,27 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 					</div>
 				</div>
 			</div>
-		)}else if (isRouteErrorResponse(error)) {
-
-			return (
-				<>
-					<h1>
-						{error.status} {error.statusText}
-					</h1>
-					<p>{error.data}</p>
-				</>
-			)
-		} else if (error instanceof Error) {
-			return (
-				<div>
-					<h1>Error</h1>
-					<p>{error.message}</p>
-					<p>The stack trace is:</p>
-					<pre>{error.stack}</pre>
-				</div>
-			);
-
+		);
+	} else if (isRouteErrorResponse(error)) {
+		return (
+			<>
+				<h1>
+					{error.status} {error.statusText}
+				</h1>
+				<p>{error.data}</p>
+			</>
+		);
+	} else if (error instanceof Error) {
+		return (
+			<div>
+				<h1>Error</h1>
+				<p>{error.message}</p>
+				<p>The stack trace is:</p>
+				<pre>{error.stack}</pre>
+			</div>
+		);
 	} else {
-		return <h1>Unknown Error</h1>
+		return <h1>Unknown Error</h1>;
 	}
 	// } else if(TApiErrorSchema) {
 	// 	return <h1>{error.status_message}</h1>;

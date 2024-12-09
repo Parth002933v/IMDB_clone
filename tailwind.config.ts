@@ -8,6 +8,7 @@ import flowbite from 'flowbite-react/tailwind';
 export default {
 	darkMode: ['class'],
 	content: [
+		'./index.html',
 		'./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}',
 		flowbite.content(),
 	],

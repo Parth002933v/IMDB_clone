@@ -11,7 +11,7 @@ export const TApiErrorSchema = z.object({
 	status_code: z.number(),
 	status_message: z.string(),
 });
-export type TApiError = z.infer<typeof  TApiErrorSchema>
+export type TApiError = z.infer<typeof TApiErrorSchema>;
 
 export interface PaginatedResponse<T> {
 	page: number;
@@ -229,7 +229,7 @@ export function isMovieDetail(
 export type TCastCrew = {
 	id: number;
 	cast: BaseCast[];
-	crew: MovieTVCrew[];
+	crew: BaseCrew[];
 };
 
 type BaseCast = {
@@ -250,9 +250,25 @@ type MovieCast = {
 	cast_id: number;
 };
 
-type TVCast = {};
+type TVCast = {
+	roles: Role[];
+	total_episode_count: number;
+};
 
-type MovieTVCrew = {
+export interface Role {
+	credit_id: string;
+	character: string;
+	episode_count: number;
+}
+
+export function isTVCast(obj: BaseCast): obj is BaseCast & TVCast {
+	return (
+		(obj as TVCast).total_episode_count !== undefined &&
+		(obj as TVCast).roles !== undefined
+	);
+}
+
+type BaseCrew = {
 	adult: boolean;
 	gender: number;
 	id: number;
@@ -261,9 +277,32 @@ type MovieTVCrew = {
 	original_name: string;
 	popularity: number;
 	profile_path?: string;
-	credit_id: string;
 	department: string;
+} & (MovieCrew | TVCrew);
+
+type MovieCrew = {
+	credit_id: string;
 	job: string;
+};
+
+type TVCrew = {
+	adult: boolean;
+	gender: number;
+	id: number;
+	known_for_department: string;
+	name: string;
+	original_name: string;
+	popularity: number;
+	profile_path?: string;
+	jobs: Job[];
+	department: string;
+	total_episode_count: number;
+};
+
+type Job = {
+	credit_id: string;
+	job: string;
+	episode_count: number;
 };
 
 //=================================Serach=====================================================================================
@@ -501,4 +540,152 @@ export interface Gravatar {
 
 export interface Tmdb {
 	avatar_path: string | null;
+}
+
+//===========================Watch Provider=========================================
+export type TWatchProvider = {
+	id: number;
+	results: watchProviderData;
+};
+
+ interface watchProviderData {
+	AD: baseProvider;
+	AE: baseProvider;
+	AG: baseProvider;
+	AL: baseProvider;
+	AR: baseProvider;
+	AT: baseProvider;
+	AU: baseProvider;
+	BA: baseProvider;
+	BB: baseProvider;
+	BE: baseProvider;
+	BF: baseProvider;
+	BG: baseProvider;
+	BH: baseProvider;
+	BM: baseProvider;
+	BR: baseProvider;
+	BS: baseProvider;
+	BY: baseProvider;
+	BZ: baseProvider;
+	CA: baseProvider;
+	CD: baseProvider;
+	CH: baseProvider;
+	CL: baseProvider;
+	CO: baseProvider;
+	CR: baseProvider;
+	CV: baseProvider;
+	CY: baseProvider;
+	CZ: baseProvider;
+	DE: baseProvider;
+	DK: baseProvider;
+	DO: baseProvider;
+	DZ: baseProvider;
+	EC: baseProvider;
+	EG: baseProvider;
+	ES: baseProvider;
+	FI: baseProvider;
+	FJ: baseProvider;
+	FR: baseProvider;
+	GB: baseProvider;
+	GF: baseProvider;
+	GG: baseProvider;
+	GH: baseProvider;
+	GI: baseProvider;
+	GR: baseProvider;
+	GT: baseProvider;
+	GY: baseProvider;
+	HK: baseProvider;
+	HN: baseProvider;
+	HR: baseProvider;
+	HU: baseProvider;
+	ID: baseProvider;
+	IE: baseProvider;
+	IL: baseProvider;
+	IN: baseProvider;
+	IS: baseProvider;
+	IT: baseProvider;
+	JM: baseProvider;
+	JO: baseProvider;
+	JP: baseProvider;
+	KE: baseProvider;
+	KR: baseProvider;
+	KW: baseProvider;
+	LB: baseProvider;
+	LC: baseProvider;
+	LT: baseProvider;
+	LU: baseProvider;
+	LV: baseProvider;
+	LY: baseProvider;
+	MA: baseProvider;
+	MC: baseProvider;
+	MD: baseProvider;
+	ME: baseProvider;
+	MK: baseProvider;
+	MT: baseProvider;
+	MU: baseProvider;
+	MX: baseProvider;
+	MY: baseProvider;
+	MZ: baseProvider;
+	NE: baseProvider;
+	NG: baseProvider;
+	NI: baseProvider;
+	NL: baseProvider;
+	NO: baseProvider;
+	NZ: baseProvider;
+	PE: baseProvider;
+	PF: baseProvider;
+	PG: baseProvider;
+	PH: baseProvider;
+	PK: baseProvider;
+	PL: baseProvider;
+	PS: baseProvider;
+	PT: baseProvider;
+	PY: baseProvider;
+	QA: baseProvider;
+	RO: baseProvider;
+	RS: baseProvider;
+	RU: baseProvider;
+	SC: baseProvider;
+	SE: baseProvider;
+	SG: baseProvider;
+	SI: baseProvider;
+	SK: baseProvider;
+	SM: baseProvider;
+	SN: baseProvider;
+	SV: baseProvider;
+	TC: baseProvider;
+	TD: baseProvider;
+	TH: baseProvider;
+	TN: baseProvider;
+	TR: baseProvider;
+	TT: baseProvider;
+	TW: baseProvider;
+	TZ: baseProvider;
+	UA: baseProvider;
+	US: baseProvider;
+	UY: baseProvider;
+	VE: baseProvider;
+	XK: baseProvider;
+	YE: baseProvider;
+	ZA: baseProvider;
+}
+
+type baseProvider = {
+	link: string;
+	ads: Ads[];
+	flatrate: Flatrate[];
+};
+
+export interface Ads {
+	logo_path: string;
+	provider_id: number;
+	provider_name: string;
+	display_priority: number;
+}
+
+export interface Flatrate {
+	logo_path: string;
+	provider_id: number;
+	provider_name: string;
+	display_priority: number;
 }

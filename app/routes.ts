@@ -1,12 +1,24 @@
-import { index, route, type RouteConfig } from '@react-router/dev/routes';
+import {
+	index,
+	layout,
+	prefix,
+	route,
+	type RouteConfig,
+} from '@react-router/dev/routes';
 
 export default [
 	index('./routes/home.tsx'),
 	route('remote/panel', './routes/remote/api/trendingMovies.tsx'),
-	route(':mediaType/:id', './routes/mediaDetail.tsx'),
 	route('login', './routes/auth/login.tsx'),
 	route('logout', './routes/auth/logout.tsx'),
 	// route('tv/:id', './routes/detail/detail_tv.tsx'),
+	// route(':mediaType/:id', './routes/detail/mediaDetail.tsx'),
+	// route(':mediaType','./routes/detail/mediaDetail.tsx', [
+	// 	route(':id', './routes/detail/detail_movie.tsx'),
+	// ]),
+
+	route('movie/:id', './routes/detail/detail_movie.tsx'),
+	route('tv/:id', './routes/detail/detail_tv.tsx'),
 
 	route('search', './routes/search/search.tsx', [
 		index('./routes/search/index.tsx'),
