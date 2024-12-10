@@ -200,56 +200,12 @@ const Profile = ({ loaderData }: Route.ComponentProps) => {
 							</DropdownMenuContent>
 						)}
 					</DropdownMenu>
-					// <div
-					// 	key={item.key}
-					// 	className=""
-					// >
-					// 	{item.lable}
-					//
-
-					// </div>
 				))}
 			</div>
 
-			<Outlet />
+			<Outlet  context={{isRootRout:true}}/>
 		</div>
 	);
 };
 
 export default Profile;
-
-function DropdownMenuDemo() {
-	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<button>Open</button>
-			</DropdownMenuTrigger>
-
-			<DropdownMenuContent className="w-56">
-				<DropdownMenuSub>
-					<DropdownMenuSubTrigger>
-						{/*<UserPlus />*/}
-						<span>Invite users</span>
-					</DropdownMenuSubTrigger>
-					<DropdownMenuPortal>
-						<DropdownMenuSubContent>
-							<DropdownMenuItem>
-								{/*<Mail />*/}
-								<span>Email</span>
-							</DropdownMenuItem>
-							<DropdownMenuItem>
-								{/*<MessageSquare />*/}
-								<span>Message</span>
-							</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								{/*<PlusCircle />*/}
-								<span>More...</span>
-							</DropdownMenuItem>
-						</DropdownMenuSubContent>
-					</DropdownMenuPortal>
-				</DropdownMenuSub>
-			</DropdownMenuContent>
-		</DropdownMenu>
-	);
-}

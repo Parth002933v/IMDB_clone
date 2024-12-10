@@ -13,17 +13,11 @@ export default [
 	route('logout', './routes/auth/logout.tsx'),
 
 	route('u/:username', './routes/profile/profile.tsx', [
-		layout('./routes/profile/Outlet.tsx', [
+		layout('./routes/profile/recommendation/Outlet.tsx', [
 			index('./routes/profile/index.tsx'),
-			route(
-				'recommendations',
-				'./routes/profile/recommendation/MovieRecommendation.tsx'
-			),
-			route(
-				'recommendations/tv',
-				'./routes/profile/recommendation/TVRecommendation.tsx'
-			),
-		]),
+			route('recommendations', './routes/profile/recommendation/MovieRecommendation.tsx'),
+			route('recommendations/tv', './routes/profile/recommendation/TVRecommendation.tsx'),
+		])
 	]),
 
 	route('movie/:id', './routes/detail/detail_movie.tsx'),
