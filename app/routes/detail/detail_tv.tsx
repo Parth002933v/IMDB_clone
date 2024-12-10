@@ -1,12 +1,10 @@
 import React from 'react';
 import { GetCastCrewByMovieId, GetMovieTVById, GetWatchProvider } from '~/lib/api';
-import { filterCrewByJobs, localWatchProvider } from '~/lib/utils';
+import { filterCrewByJobs } from '~/lib/utils';
 import { Route } from '../../../.react-router/types/app/routes/detail/+types/detail_tv';
 import { data } from 'react-router';
 import DetailBanner from '~/components/movie_tv_detail/detailBanner';
 import CastCrew from '~/components/movie_tv_detail/CastCrews';
-import { FaBookmark, FaList, FaStar } from 'react-icons/fa';
-import { MdFavorite } from 'react-icons/md';
 import WatchProvider from '~/components/movie_tv_detail/watchProvider';
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -18,12 +16,13 @@ export async function loader({ params }: Route.LoaderArgs) {
 	const MovieId = params.id.split('-')[0];
 
 	const movieDetail = await GetMovieTVById(MovieId, 'tv');
-	const CastCrew = await GetCastCrewByMovieId(MovieId, 'tv');
+	// const CastCrew = await GetCastCrewByMovieId(MovieId, 'tv');
 
-	const pagginatedCast = CastCrew.data.cast.slice(0, 10);
-	const importantCrews = filterCrewByJobs(CastCrew.data.crew);
+	// const pagginatedCast = CastCrew.data.cast.slice(0, 10);
+	const pagginatedCast = movieDetail.data.credits.cast.slice(0, 10);
+	const importantCrews = filterCrewByJobs(movieDetail.data.credits.crew);
 
-	const watchProvider = await GetWatchProvider('tv', MovieId);
+	// const watchProvider = await GetWatchProvider('tv', MovieId);
 	// const fullImage = `https://media.themoviedb.org/t/p/w300_and_h450_bestv2${movieDetail.data.backdrop_path}`;
 
 	// console.log(fullImage);
@@ -51,7 +50,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 		movieDetail: movieDetail.data,
 		paginatedCast: pagginatedCast,
 		importantCrews: importantCrews,
-		watchProvider: watchProvider.data,
+		watchProvider: movieDetail.data["watch/providers"],
 		colorPalette: '',
 	});
 }
@@ -70,11 +69,15 @@ const TvDetail = ({ loaderData }: Route.ComponentProps) => {
 	// const runtime = `${convertMinutes(movieDetail.runtime).hours}h ${convertMinutes(movieDetail.runtime).minutes}m`;
 	return (
 		<div className="h-full w-full">
-			<DetailBanner data={movieDetail} importantCrews={importantCrews} provider={watchProvider.results.IN.flatrate[0]}/>
+			<DetailBanner
+				data={movieDetail}
+				importantCrews={importantCrews}
+				provider={watchProvider.results.IN?.flatrate[0]}
+			/>
 
 			<CastCrew paginatedCast={paginatedCast} />
 
-			{Object.keys(watchProvider.results).length === 0 ? (
+			{Object.keys(watchProvider.results).length === 0 || watchProvider.results.IN == undefined ? (
 				<></>
 			) : (
 				<WatchProvider provider={watchProvider.results.IN.flatrate[0]} />

@@ -24,6 +24,10 @@ axiosRetry(axios, {
 
 axios.interceptors.request.use(config => {
 	// console.log('===apihandler==', config.url, '===apihandler===');
+	// const url = new URL(config.url || '');
+	// url.searchParams.append('watch_region', 'IN');
+	// url.searchParams.append('language', 'hi-IN');
+	// config.url = url.toString();
 	return config;
 });
 
@@ -58,7 +62,7 @@ const handleApiError = (error: AxiosError): Promise<AxiosResponse | undefined> =
 				return Promise.resolve(undefined); // want to return here
 			}
 			return Promise.reject({
-				success:false,
+				success: false,
 				statusCode: globalAPIError.data.status_code,
 				status_message: globalAPIError.data.status_message,
 			});

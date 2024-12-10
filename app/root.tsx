@@ -90,7 +90,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	// 	return undefined;
 	// }
 
-	axios.interceptors.request.eject(id);
+	// axios.interceptors.request.eject(id);
 	return profileDetail?.data;
 }
 
@@ -98,16 +98,18 @@ export default function App({ loaderData }: Route.ComponentProps) {
 	const loaderRef = useRef<LoadingBarRef | null>(null);
 
 	return (
-		<LoaderContext.Provider value={{ loaderRef: loaderRef }}>
-			<div className={'h-dvh'}>
-				<LoadingBar ref={loaderRef} />
-				<NavBar profileData={loaderData} />
-				<div className={'h-max'}>
-					<Outlet />
+		<React.Suspense fallback={<div>Loading...</div>}>
+			<LoaderContext.Provider value={{ loaderRef: loaderRef }}>
+				<div className={'h-dvh'}>
+					<LoadingBar ref={loaderRef} />
+					<NavBar profileData={loaderData} />
+					<div className={'h-max'}>
+						<Outlet context={loaderData} />
+					</div>
+					<Footer />
 				</div>
-				<Footer />
-			</div>
-		</LoaderContext.Provider>
+			</LoaderContext.Provider>
+		</React.Suspense>
 	);
 }
 

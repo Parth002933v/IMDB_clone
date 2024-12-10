@@ -1,17 +1,17 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
-import { BaseMediaDetails, Flatrate, isMovieDetail } from '~/tyoes';
+import { BaseMediaDetails, isMovieDetail, providerData, TProfile } from '~/tyoes';
 import RoundedProgressBar from '~/components/prgressbar';
 import { convertMinutes } from '~/lib/utils';
 import { FaBookmark, FaList, FaPlay } from 'react-icons/fa';
 import { MdFavorite } from 'react-icons/md';
 import { Popover } from 'flowbite-react';
+import { useOutletContext } from 'react-router';
 
 interface DetailBannerProps {
 	data: BaseMediaDetails;
 	importantCrews: { name: string; jobs: string[] }[];
-
-	provider: Flatrate;
+	provider?: providerData;
 }
 
 const DetailBanner = ({
@@ -19,24 +19,37 @@ const DetailBanner = ({
 	importantCrews,
 	provider,
 }: DetailBannerProps) => {
+	const outletData: TProfile | undefined = useOutletContext();
+	console.log(outletData?.id);
+	// console.log(provider);
 	const isMovie = isMovieDetail(media);
 
+	// if(!isMovie){
+	// 	console.log(media.content_ratings.results[0].rating);
+	// }
 	const runtime = isMovie
 		? `${convertMinutes(media.runtime).hours}h ${convertMinutes(media.runtime).minutes}m`
 		: null;
 	// console.log(`url('https://media.themoviedb.org/t/p/w1000_and_h450_multi_faces${media.backdrop_path}')`);
 	const actionButtons = [
 		{
+			id: 1,
 			icons: FaList,
 			lable: 'add to ist',
+			no_login_lable: 'Login to create and edit custom lists',
 		},
 		{
+			id: 2,
 			icons: MdFavorite,
 			lable: 'Mark as Favorite',
+			no_login_lable: 'Login to add this movie to your favorite list',
 		},
 		{
+			id: 3,
 			icons: FaBookmark,
 			lable: 'Add to your watchlist',
+
+			no_login_lable: 'Login to add this movie to your watchlist',
 		},
 	];
 
@@ -53,28 +66,34 @@ const DetailBanner = ({
 							'bg-[calc((((100vw/2.222222)-20px)/1.5)/2)_0]'
 						)}
 					>
-						<div className="absolute left-0 top-0 h-full w-full bg-[linear-gradient(to_right,rgba(10.5,31.5,52.5,1)_20%,rgba(10.5,31.5,52.5,0)_50%)]" />
-						<div className="absolute inset-0 bg-slate-700 opacity-50" />
+						<div
+							key="gradient"
+							className="absolute left-0 top-0 h-full w-full bg-[linear-gradient(to_right,rgba(10.5,31.5,52.5,1)_20%,rgba(10.5,31.5,52.5,0)_50%)]"
+						/>
+						<div
+							key="left_shadow"
+							className="absolute inset-0 bg-slate-700 opacity-50"
+						/>
 						{/*<div className="w-[calc(((100vw/2.222222) - 40px)/1.5)] min-w-[calc(((100vw/2.222222) - 40px)/1.5)] h-[calc((100vw/2.222222) - 40px)] min-h-[calc((100vw/2.222222) - 40px)] absolute left-5 top-4 z-[4] overflow-hidden">*/}
 
-						<div className="w-[calc(((100vw/2.222222) - 40px)/1.5)] min-w-[calc(((100vw/2.222222) - 40px)/1.5)] h-[calc((100vw/2.222222) - 40px)] min-h-[calc((100vw/2.222222) - 40px)] absolute left-5 top-3 z-[4] overflow-hidden">
+						<div className="absolute bottom-0 left-5 top-0 z-[4] my-auto h-[80%] overflow-hidden">
 							<img
 								className="hidden h-full min-h-full w-full min-w-full rounded-md max-md:block"
-								src={`https://media.themoviedb.org/t/p/w116_and_h174_face/${media.poster_path}`}
+								src={`https://media.themoviedb.org/t/p/w300_and_h450_face/${media.poster_path}`}
 								// srcSet={`https://media.themoviedb.org/t/p/w116_and_h174_face/${movieDetail.poster_path} 1x, https://media.themoviedb.org/t/p/w220_and_h330_face/${movieDetail.poster_path} 2x`}
 								alt={
 									isMovie ? `${media.title} poster` : `${media.name} poster`
 								}
 							/>
 
-							<img
-								className="hidden h-full min-h-full w-full min-w-full md:block"
-								src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${media.poster_path}`}
-								// srcSet={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetail.poster_path} 1x, https://media.themoviedb.org/t/p/w600_and_h900_bestv2/${movieDetail.poster_path} 2x`}
-								alt={
-									isMovie ? `${media.title} poster` : `${media.name} poster`
-								}
-							/>
+							{/*<img*/}
+							{/*	className="hidden h-full min-h-full w-full min-w-full md:block"*/}
+							{/*	src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${media.poster_path}`}*/}
+							{/*	// srcSet={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetail.poster_path} 1x, https://media.themoviedb.org/t/p/w600_and_h900_bestv2/${movieDetail.poster_path} 2x`}*/}
+							{/*	alt={*/}
+							{/*		isMovie ? `${media.title} poster` : `${media.name} poster`*/}
+							{/*	}*/}
+							{/*/>*/}
 						</div>
 					</div>
 				</div>
@@ -124,9 +143,7 @@ const DetailBanner = ({
 				</div>
 
 				<div className="px-5 pt-3">
-					<div className="font-medium italic text-gray-500">
-						{media.tagline}
-					</div>
+					<div className="font-medium italic text-white">{media.tagline}</div>
 					<div className="text-xl font-semibold">Overview</div>
 					<div className="mt-2 text-sm font-normal">{media.overview}</div>
 
@@ -145,8 +162,8 @@ const DetailBanner = ({
 			{/*//==========================================================*/}
 			<div
 				className={twMerge(
-					'relative flex h-[58vh] w-full min-w-full',
-					'max-md:invisible'
+					'relative flex h-[35rem] w-full min-w-full overflow-hidden',
+					'max-md:hidden'
 				)}
 			>
 				<div
@@ -161,14 +178,16 @@ const DetailBanner = ({
 				></div>
 
 				<div className="absolute left-0 top-0 h-full w-full bg-[linear-gradient(to_right,rgba(10.5,31.5,52.5,1)_20%,rgba(10.5,31.5,52.5,0)_50%)]" />
-				<div className="absolute inset-0 bg-slate-700 opacity-70" />
-				<div className="absolute inset-0 mx-auto flex w-full max-w-[1350px] items-center gap-7">
+				<div className="absolute inset-0 bg-slate-500 opacity-70" />
+				<div className="absolute inset-0 mx-auto my-auto flex h-full w-full max-w-[1350px] items-center justify-center gap-7 px-5">
 					<div
 						id="poster"
 						// className="flex h-[33rem] w-[19rem] flex-col overflow-hidden rounded-md "
-						className="flex w-[calc(((100vw/2.222222) - 40px)/1.5)] min-w-[calc(((100vw/2.222222) - 40px)/1.5)] h-[calc((100vw/2.222222) - 40px)] min-h-[calc((100vw/2.222222) - 40px)] flex-col overflow-hidden rounded-md"
+						// className=" flex w-[calc(((100vw/2.222222) - 40px)/1.5)] min-w-[calc(((100vw/2.222222) - 40px)/1.5)] h-[calc((100vw/2.222222) - 80px)] min-h-[calc((100vw/2.222222) - 40px)] flex-col overflow-hidden rounded-md"
+
+						className="flex h-[39rem] w-[289px] flex-none flex-col justify-center overflow-hidden"
 					>
-						<div className="">
+						<div className="h-[70%] w-full overflow-hidden rounded-tl-md rounded-tr-md">
 							<img
 								src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${media.poster_path}`}
 								className="h-full w-full object-fill"
@@ -176,12 +195,12 @@ const DetailBanner = ({
 							/>
 						</div>
 
-						<div className="flex h-[15%] items-center justify-center bg-[#032541]">
+						<div className="flex h-[10%] items-center justify-center rounded-bl-md rounded-br-md bg-[#032541]">
 							<div>
 								<div className="flex w-full items-center justify-center gap-3">
 									<div className="h-9 w-9 overflow-hidden rounded-md">
 										<img
-											src={`https://media.themoviedb.org/t/p/original/${provider.logo_path}`}
+											src={`https://media.themoviedb.org/t/p/original/${provider && provider.logo_path}`}
 											alt="provdier"
 										/>
 									</div>
@@ -198,7 +217,7 @@ const DetailBanner = ({
 						</div>
 					</div>
 
-					<div id="detail" className="text-white">
+					<div id="detail" className="flex-auto text-white">
 						<div className="mt-3 text-3xl font-bold">
 							{isMovie ? media.title : media.name}
 							<span className="pl-1 font-normal text-gray-300">
@@ -214,7 +233,14 @@ const DetailBanner = ({
 
 						<div className="mb-2 flex items-center gap-2">
 							<div className="border border-[#FFFFFF99] p-0.5 text-sm text-[#FFFFFF99]">
-								PG-13
+								{/*{isMovie ?media.release_dates.results.find((f)=>f.iso_3166_1 =="IN")?.release_dates[0].certification : "-"}*/}
+								{isMovie
+									? media.release_dates.results.find(
+											f => f.iso_3166_1 == 'IN'
+										)?.release_dates[0].certification
+									: media.content_ratings.results.find(
+											f => f.iso_3166_1 == 'IN'
+										)?.rating}
 							</div>
 							<div className="whitespace-nowrap text-nowrap text-center text-sm text-white">
 								{isMovie && (
@@ -249,13 +275,25 @@ const DetailBanner = ({
 									className="border-none bg-[#032541]"
 									key={m.lable}
 									content={
-										<div className="bg-[#032541] px-2 py-2 text-xs">
-											{m.lable}
+										<div
+											className={twMerge(
+												`bg-[#032541] px-2 py-2 text-xs`
+											)}
+										>
+											{outletData ? m.lable : m.no_login_lable}
 										</div>
 									}
 									trigger={'hover'}
 								>
-									<div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#032541]">
+									<div
+										onClick={() => {
+											console.log(m.lable);
+										}}
+										className={twMerge(
+											`flex h-12 w-12 cursor-default items-center justify-center rounded-full bg-[#032541]`,
+											outletData && 'cursor-pointer'
+										)}
+									>
 										{<m.icons />}
 									</div>
 								</Popover>

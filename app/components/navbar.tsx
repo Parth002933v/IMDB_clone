@@ -184,12 +184,12 @@ const ProfileComponent = ({ profileData }: ProfileComponentProps) => {
 
 	const loginContent = (
 		<div className="z-10 flex flex-col items-start justify-center py-2 text-start text-sm text-gray-500">
-			<div className="px-4 py-3">
+			<Link to={`./u/${profileData?.username}`} className="px-4 py-3">
 				<div className="text-xs font-semibold text-black">
 					{profileData?.username}
 				</div>
 				<div className="text-[0.68rem] text-gray-500">View Profile</div>
-			</div>
+			</Link>
 
 			<hr className="h-0.5 w-full bg-gray-400" />
 

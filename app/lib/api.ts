@@ -10,15 +10,24 @@ import {
 	TrendingMovieGroupType,
 	TRequestToken,
 	TSessionSuccess,
-	TTrendingMovieTV, TWatchProvider,
+	TTrendingMovieTV,
+	TWatchProvider,
 } from '~/tyoes';
 import { axios } from '~/lib/apiHandler';
 import { BASE_URL } from '~/lib/constant';
 // 20429186
 
 export const GetTrendingMovies = (by: TrendingMovieGroupType) => {
+	const params = new URLSearchParams();
+	params.set("sort_by","popularity.desc")
+	// url.searchParams.append('watch_region', 'IN');
+	// url.searchParams.append('language', 'hi-IN');
+	params.set("watch_region","IN")
+	params.set("language","hi-IN")
+
+
 	return axios.get<TTrendingMovieTV>(
-		`${BASE_URL}/trending/all/${by}?language=en-US`
+		`${BASE_URL}/trending/all/${by}?${params}`
 	);
 };
 
@@ -26,6 +35,8 @@ export const GetPopularMovies = (by: PopularMovieGroupType) => {
 	let baseURL = `${BASE_URL}/discover/movie`;
 	const params = new URLSearchParams();
 
+	params.set("watch_region","IN")
+	params.set("language","hi-IN")
 	switch (by) {
 		case 'streaming':
 			params.set('with_watch_monetization_types', 'flatrate');
@@ -43,7 +54,7 @@ export const GetPopularMovies = (by: PopularMovieGroupType) => {
 			params.set('with_watch_monetization_types', 'flatrate');
 	}
 
-	params.set('watch_region', 'IN');
+	// params.set('watch_region', 'IN');
 	// params.set('language', 'en-US');
 	return axios.get<TMovieTV>(`${baseURL}?${params}`);
 };
@@ -53,8 +64,10 @@ export const GetFreeShow = (by: FreeToWatchGroupType) => {
 
 	const params = new URLSearchParams();
 	params.set('with_watch_monetization_types', 'free');
-	params.set('watch_region', 'IN');
-	params.set('language', 'en-US');
+	params.set("watch_region","IN")
+	params.set("language","hi-IN")
+	// params.set('watch_region', 'IN');
+	// params.set('language', 'en-US');
 
 	return axios.get<TMovieTV>(`${baseUrl}?${params.toString()}`);
 };
@@ -64,13 +77,19 @@ export const GetMovieTVById = (id: string, mediaType: 'movie' | 'tv') => {
 	const param = new URLSearchParams();
 	param.set('language', 'en-US');
 
+	if (mediaType === 'movie') {
+		param.set( 'append_to_response', `${['release_dates', 'credits', 'watch/providers'].join(',')}`);
+	} else if (mediaType === 'tv') {
+		param.set( 'append_to_response', `${['content_ratings', 'credits', 'watch/providers'].join(',')}`);
+	}
+
 	return axios.get<BaseMediaDetails>(`${baseUrl}?${param.toString()}`);
 };
 
 export const GetCastCrewByMovieId = (movieId: string, mediaType: 'movie' | 'tv') => {
 	const baseUrl = `${BASE_URL}/${mediaType}/${movieId}/${mediaType === 'tv' ? 'aggregate_credits' : 'credits'}`;
 	const param = new URLSearchParams();
-	param.set('language', 'en-US');
+	// param.set('language', 'en-US');
 
 	return axios.get<TCastCrew>(`${baseUrl}?${param.toString()}`);
 };
@@ -83,8 +102,8 @@ export const GetSearchResult = <T>(
 	const baseURL = `${BASE_URL}/search/${mediaType}`;
 
 	const params = new URLSearchParams();
-	params.set('language', 'en-US');
-	params.set('include_adult', 'false');
+	// params.set('language', 'en-US');
+	// params.set('include_adult', 'false');
 	params.set('page', '1');
 	params.set('query', keyword);
 	params.set('page', page);
@@ -142,3 +161,4 @@ export const GetWatchProvider = (mediaType: 'tv' | 'movie', mediaID: string) => 
 
 	return axios.get<TWatchProvider>(baseUrl);
 };
+

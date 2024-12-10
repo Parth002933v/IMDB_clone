@@ -11,11 +11,20 @@ export default [
 	route('remote/panel', './routes/remote/api/trendingMovies.tsx'),
 	route('login', './routes/auth/login.tsx'),
 	route('logout', './routes/auth/logout.tsx'),
-	// route('tv/:id', './routes/detail/detail_tv.tsx'),
-	// route(':mediaType/:id', './routes/detail/mediaDetail.tsx'),
-	// route(':mediaType','./routes/detail/mediaDetail.tsx', [
-	// 	route(':id', './routes/detail/detail_movie.tsx'),
-	// ]),
+
+	route('u/:username', './routes/profile/profile.tsx', [
+		layout('./routes/profile/Outlet.tsx', [
+			index('./routes/profile/index.tsx'),
+			route(
+				'recommendations',
+				'./routes/profile/recommendation/MovieRecommendation.tsx'
+			),
+			route(
+				'recommendations/tv',
+				'./routes/profile/recommendation/TVRecommendation.tsx'
+			),
+		]),
+	]),
 
 	route('movie/:id', './routes/detail/detail_movie.tsx'),
 	route('tv/:id', './routes/detail/detail_tv.tsx'),

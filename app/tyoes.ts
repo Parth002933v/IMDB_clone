@@ -119,9 +119,11 @@ export type BaseMediaDetails = {
 	tagline: string;
 	vote_average: number;
 	vote_count: number;
+	credits: TCastCrew;
+	"watch/providers": TWatchProvider
 } & (TMovieDetail | TTVDetail);
 
-export interface TMovieDetail {
+type TMovieDetail ={
 	belongs_to_collection: BelongsToCollection;
 	budget: number;
 	imdb_id: string;
@@ -131,6 +133,25 @@ export interface TMovieDetail {
 	runtime: number;
 	title: string;
 	video: boolean;
+	release_dates: ReleaseDates;
+}
+
+export interface ReleaseDates {
+	results: ReleaseDatesData[];
+}
+
+export interface ReleaseDatesData {
+	iso_3166_1: string;
+	release_dates: ReleaseDate[];
+}
+
+export interface ReleaseDate {
+	certification: string;
+	descriptors: any[];
+	iso_639_1: string;
+	note: string;
+	release_date: string;
+	type: number;
 }
 
 export interface TTVDetail {
@@ -149,6 +170,7 @@ export interface TTVDetail {
 	original_name: string;
 	seasons: Season[];
 	type: string;
+	content_ratings: ContentRatings;
 }
 
 interface BelongsToCollection {
@@ -215,6 +237,16 @@ export interface Season {
 	vote_average: number;
 }
 
+export interface ContentRatings {
+	results: ContentRatingsData[];
+}
+
+export interface ContentRatingsData {
+	descriptors: any[];
+	iso_3166_1: string;
+	rating: string;
+}
+
 export function isMovieDetail(
 	obj: BaseMediaDetails
 ): obj is BaseMediaDetails & TMovieDetail {
@@ -278,11 +310,12 @@ type BaseCrew = {
 	popularity: number;
 	profile_path?: string;
 	department: string;
+
+	job: string;
 } & (MovieCrew | TVCrew);
 
 type MovieCrew = {
 	credit_id: string;
-	job: string;
 };
 
 type TVCrew = {
@@ -294,7 +327,6 @@ type TVCrew = {
 	original_name: string;
 	popularity: number;
 	profile_path?: string;
-	jobs: Job[];
 	department: string;
 	total_episode_count: number;
 };
@@ -545,10 +577,10 @@ export interface Tmdb {
 //===========================Watch Provider=========================================
 export type TWatchProvider = {
 	id: number;
-	results: watchProviderData;
+	results: Partial< watchProviderData>;
 };
 
- interface watchProviderData {
+interface watchProviderData {
 	AD: baseProvider;
 	AE: baseProvider;
 	AG: baseProvider;
@@ -672,20 +704,14 @@ export type TWatchProvider = {
 
 type baseProvider = {
 	link: string;
-	ads: Ads[];
-	flatrate: Flatrate[];
+	ads: providerData[];
+	flatrate: providerData[];
 };
 
-export interface Ads {
+export interface providerData {
 	logo_path: string;
 	provider_id: number;
 	provider_name: string;
 	display_priority: number;
 }
 
-export interface Flatrate {
-	logo_path: string;
-	provider_id: number;
-	provider_name: string;
-	display_priority: number;
-}
