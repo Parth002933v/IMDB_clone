@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	data,
 	Form,
 	redirect,
+	redirectDocument,
 	UNSAFE_DataWithResponseInit,
 	useFetcher,
+	useRevalidator,
 } from 'react-router';
 import { Route } from '../../../.react-router/types/app/routes/auth/+types/login';
 import { createRequestToken, CreateSessionId, login } from '~/lib/api';
@@ -17,9 +19,15 @@ export async function loader({ request }: Route.LoaderArgs) {
 	const cookieSession = await cookieSessionStorage.getSession(
 		request.headers.get('Cookie')
 	);
+	// console.log(cookieSession);
 
+	console.log('login laodre', cookieSession.get('session_id'), 'login loader');
 	if (cookieSession.get('session_id')) {
-		return redirect(`/`);
+		return redirect(`/`, {
+			headers: {
+				'Cache-Control': 'no-store',
+			},
+		});
 	}
 }
 
@@ -48,21 +56,37 @@ export async function action({
 	// console.log(grantedRequestToken.data.success);
 	const sessionRes = await CreateSessionId(grantedRequestToken.data.request_token);
 
-	console.log('login', sessionRes.data.session_id, 'login ');
+	// console.log('login', sessionRes.data.session_id, 'login ');
 	const session = await getCookieSessionFromHeader(request);
 	session.set('session_id', sessionRes.data.session_id);
 	// await cookieSessionStorage.commitSession(session)
 
+	const sesstionHearder = await cookieSessionStorage.commitSession(session);
+	console.log('sesstrion header', sesstionHearder, 'sesston header');
+	// return data('done!', {
+	// 	headers: {
+	// 		'Cache-Control': 'no-store',
+	// 		'Set-Cookie': sesstionHearder,
+	// 	},
+	// });
 	return redirect('/', {
 		headers: {
 			'Cache-Control': 'no-store',
-			'Set-Cookie': await cookieSessionStorage.commitSession(session),
+			'X-Remix-Revalidate':"true",
+			'Set-Cookie': sesstionHearder,
 		},
 	});
 }
 
 const Login = ({ actionData }: Route.ComponentProps) => {
 	let fetcher = useFetcher();
+
+	// useEffect(() => {
+	// 	if (fetcher.state === 'submitting') {
+	// 		fetcher.load('/');
+	// 	}
+	// }, [fetcher.state]);
+	//
 	return (
 		<div className="mx-auto h-full w-full flex-grow px-5 py-5 md:max-w-[1350px]">
 			<div className="mb-3 text-xl font-semibold">Login to your account</div>
@@ -79,7 +103,7 @@ const Login = ({ actionData }: Route.ComponentProps) => {
 				it resent.
 			</p>
 
-			<fetcher.Form method="POST">
+			<fetcher.Form action="#" method="post">
 				<CredentialInputField
 					key="username"
 					lable={'Username'}

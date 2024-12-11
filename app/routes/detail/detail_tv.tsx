@@ -70,7 +70,7 @@ const TvDetail = ({ loaderData }: Route.ComponentProps) => {
 	return (
 		<div className="h-full w-full">
 			<DetailBanner
-				data={movieDetail}
+				detailMediaData={movieDetail}
 				importantCrews={importantCrews}
 				provider={watchProvider.results.IN?.flatrate[0]}
 			/>

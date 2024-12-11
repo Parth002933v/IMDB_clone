@@ -2,11 +2,10 @@ import React from 'react';
 import { Route } from '../../../.react-router/types/app/routes/detail/+types/detail_movie';
 import { GetMovieTVById } from '~/lib/api';
 import { filterCrewByJobs } from '~/lib/utils';
-import { data, useOutletContext } from 'react-router';
+import { data } from 'react-router';
 import DetailBanner from '~/components/movie_tv_detail/detailBanner';
 import CastCrew from '~/components/movie_tv_detail/CastCrews';
 import WatchProvider from '~/components/movie_tv_detail/watchProvider';
-import { TProfile } from '~/tyoes';
 
 export async function loader({ params }: Route.LoaderArgs) {
 	// console.log('mediaDeatl', params);
@@ -74,7 +73,7 @@ const MovieDetail = ({ loaderData }: Route.ComponentProps) => {
 	return (
 		<div className="h-full w-full">
 			<DetailBanner
-				data={movieDetail}
+				detailMediaData={movieDetail}
 				importantCrews={importantCrews}
 				provider={watchProvider.results.IN?.flatrate[0]}
 			/>

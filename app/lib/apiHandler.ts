@@ -1,13 +1,13 @@
 import ax, { AxiosError, AxiosResponse } from 'axios';
 import axiosRetry from 'axios-retry';
-import { TApiErrorSchema, TSessionErrorSchema } from '~/tyoes';
+import { TBaseApiResponseSchema, TSessionErrorSchema } from '~/tyoes';
 
 export const axios = ax.create({
 	timeout: 3000,
-	withCredentials: true,
+	// withCredentials: true,
 	headers: {
 		Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOCKEN}`,
-		'Content-Type': 'application/json',
+		// 'Content-Type': 'application/json',
 	},
 });
 
@@ -22,14 +22,14 @@ axiosRetry(axios, {
 	},
 });
 
-axios.interceptors.request.use(config => {
-	// console.log('===apihandler==', config.url, '===apihandler===');
-	// const url = new URL(config.url || '');
-	// url.searchParams.append('watch_region', 'IN');
-	// url.searchParams.append('language', 'hi-IN');
-	// config.url = url.toString();
-	return config;
-});
+// axios.interceptors.request.use(config => {
+// 	// console.log('===apihandler==', config.url, '===apihandler===');
+// 	// const url = new URL(config.url || '');
+// 	// url.searchParams.append('watch_region', 'IN');
+// 	// url.searchParams.append('language', 'hi-IN');
+// 	// config.url = url.toString();
+// 	return config;
+// });
 
 axios.interceptors.response.use(
 	response => {
@@ -55,7 +55,7 @@ const handleApiError = (error: AxiosError): Promise<AxiosResponse | undefined> =
 			});
 		}
 
-		const globalAPIError = TApiErrorSchema.safeParse(data);
+		const globalAPIError = TBaseApiResponseSchema.safeParse(data);
 		if (globalAPIError.success) {
 			if (globalAPIError.data.status_code == 3) {
 				// return Promise.resolve(error.response); // want to return here

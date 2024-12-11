@@ -37,10 +37,10 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	// );
 
 	const profileDetail = await GetUserDetails();
-	// console.log(profileDetail);
+	console.log(profileDetail);
 
-	if (!profileDetail.data) {
-		throw data('Invalid User Profile', { status: 404 });
+	if (!profileDetail || !profileDetail.data) {
+		throw data('Invalid User Profile please try to login ', { status: 404 });
 	} else if (profileDetail.data.username !== params.username) {
 		throw data('Invalid User Profile', { status: 404 });
 	}
@@ -133,7 +133,7 @@ const Profile = ({ loaderData }: Route.ComponentProps) => {
 		<div className="h-full w-full">
 			<div
 				key="profile"
-				className="mx-auto flex h-28 max-w-[1350px] items-center justify-center gap-3 bg-red-700"
+				className="mx-auto flex h-28 max-w-[1350px] items-center justify-center gap-3 "
 			>
 				<button
 					key="avatar"
@@ -167,7 +167,7 @@ const Profile = ({ loaderData }: Route.ComponentProps) => {
 					</div>
 				</button>
 
-				<div key="username" className="text-2xl font-semibold text-white">
+				<div key="username" className="text-2xl font-semibold text-black">
 					{profile.username}
 				</div>
 			</div>
@@ -203,7 +203,7 @@ const Profile = ({ loaderData }: Route.ComponentProps) => {
 				))}
 			</div>
 
-			<Outlet  context={{isRootRout:true}}/>
+			<Outlet/>
 		</div>
 	);
 };

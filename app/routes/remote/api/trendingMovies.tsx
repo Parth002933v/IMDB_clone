@@ -1,4 +1,4 @@
-import { GetFreeShow, GetPopularMovies, GetTrendingMovies } from '~/lib/api';
+import { GetFreeShow, GetPopularMovies, GetTrendingMedia } from '~/lib/api';
 import {
 	isFreeToWatchMovieGroupType,
 	isPopularMovieGroupType,
@@ -24,7 +24,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 			if (!isTrendingMovieGroupType(group)) {
 				throw data('the params is not valid', { status: 400 });
 			} else {
-				const res = await GetTrendingMovies(group);
+				const res = await GetTrendingMedia("all",group);
 				return res.data;
 				// return (await res.json()) as Promise<TTrendingMovie>;
 			}

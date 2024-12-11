@@ -175,7 +175,7 @@ const MediaDetail = ({ loaderData }: Route.ComponentProps) => {
 			{/*<>{colorPalette && colorPalette[0].join(',')}</>*/}
 			{/*<>{colorPalette.primary}</>*/}
 			{/*banner and overview*/}
-			<DetailBanner key="banner" data={movieDetail.data} importantCrews={importantCrews}/>
+			<DetailBanner key="banner" detailMediaData={movieDetail.data} importantCrews={importantCrews}/>
 			{/*<div key="banner" className={twMerge(`relative`)}>*/}
 			{/*	<div className="h-full w-[100vw] min-w-[100vw]">*/}
 			{/*		<div className="relative h-[calc(100vw/2.222222)] w-full min-w-[100vw] overflow-hidden">*/}

@@ -1,17 +1,17 @@
 import { z } from 'zod';
 
-export type ApiError = {
-	statusCode?: number;
-	status_message: string;
-	detail?: any;
-};
+// export type ApiError = {
+// 	statusCode?: number;
+// 	status_message: string;
+// 	detail?: any;
+// };
 
-export const TApiErrorSchema = z.object({
+export const TBaseApiResponseSchema = z.object({
 	success: z.boolean(),
 	status_code: z.number(),
 	status_message: z.string(),
 });
-export type TApiError = z.infer<typeof TApiErrorSchema>;
+export type TBaseApiResponse = z.infer<typeof TBaseApiResponseSchema>;
 
 export interface PaginatedResponse<T> {
 	page: number;
@@ -120,10 +120,10 @@ export type BaseMediaDetails = {
 	vote_average: number;
 	vote_count: number;
 	credits: TCastCrew;
-	"watch/providers": TWatchProvider
+	'watch/providers': TWatchProvider;
 } & (TMovieDetail | TTVDetail);
 
-type TMovieDetail ={
+type TMovieDetail = {
 	belongs_to_collection: BelongsToCollection;
 	budget: number;
 	imdb_id: string;
@@ -134,27 +134,27 @@ type TMovieDetail ={
 	title: string;
 	video: boolean;
 	release_dates: ReleaseDates;
-}
+};
 
-export interface ReleaseDates {
+export type ReleaseDates = {
 	results: ReleaseDatesData[];
-}
+};
 
-export interface ReleaseDatesData {
+export type ReleaseDatesData = {
 	iso_3166_1: string;
 	release_dates: ReleaseDate[];
-}
+};
 
-export interface ReleaseDate {
+export type ReleaseDate = {
 	certification: string;
 	descriptors: any[];
 	iso_639_1: string;
 	note: string;
 	release_date: string;
 	type: number;
-}
+};
 
-export interface TTVDetail {
+export type TTVDetail = {
 	created_by: any[];
 	episode_run_time: number[];
 	first_air_date: string;
@@ -171,39 +171,39 @@ export interface TTVDetail {
 	seasons: Season[];
 	type: string;
 	content_ratings: ContentRatings;
-}
+};
 
-interface BelongsToCollection {
+type BelongsToCollection = {
 	id: number;
 	name: string;
 	poster_path: string;
 	backdrop_path: string;
-}
+};
 
-interface Genre {
+type Genre = {
 	id: number;
 	name: string;
-}
+};
 
-interface ProductionCompany {
+type ProductionCompany = {
 	id: number;
 	logo_path?: string;
 	name: string;
 	origin_country: string;
-}
+};
 
-interface ProductionCountry {
+type ProductionCountry = {
 	iso_3166_1: string;
 	name: string;
-}
+};
 
-interface SpokenLanguage {
+type SpokenLanguage = {
 	english_name: string;
 	iso_639_1: string;
 	name: string;
-}
+};
 
-export interface LastEpisodeToAir {
+type LastEpisodeToAir = {
 	id: number;
 	name: string;
 	overview: string;
@@ -217,16 +217,16 @@ export interface LastEpisodeToAir {
 	season_number: number;
 	show_id: number;
 	still_path: string;
-}
+};
 
-export interface Network {
+type Network = {
 	id: number;
 	logo_path: string;
 	name: string;
 	origin_country: string;
-}
+};
 
-export interface Season {
+type Season = {
 	air_date?: string;
 	episode_count: number;
 	id: number;
@@ -235,13 +235,13 @@ export interface Season {
 	poster_path: string;
 	season_number: number;
 	vote_average: number;
-}
+};
 
-export interface ContentRatings {
+interface ContentRatings {
 	results: ContentRatingsData[];
 }
 
-export interface ContentRatingsData {
+interface ContentRatingsData {
 	descriptors: any[];
 	iso_3166_1: string;
 	rating: string;
@@ -287,7 +287,7 @@ type TVCast = {
 	total_episode_count: number;
 };
 
-export interface Role {
+interface Role {
 	credit_id: string;
 	character: string;
 	episode_count: number;
@@ -341,7 +341,7 @@ type Job = {
 
 export type SearchMediaType = 'tv' | 'movie' | 'person' | 'multi';
 
-interface TMultiSearchData {
+type TMultiSearchData = {
 	id: number;
 	name: string;
 	original_name: string;
@@ -361,9 +361,9 @@ interface TMultiSearchData {
 	vote_average?: number;
 	vote_count?: number;
 	origin_country?: string[];
-}
+};
 
-interface KnownFor {
+type KnownFor = {
 	backdrop_path?: string;
 	id: number;
 	name?: string;
@@ -383,12 +383,12 @@ interface KnownFor {
 	original_title?: string;
 	release_date?: string;
 	video?: boolean;
-}
+};
 
 export type TMultiSearch = PaginatedResponse<TMultiSearchData>;
 
 //======================================================================================================================
-interface TMovieSearchData {
+type TMovieSearchData = {
 	adult: boolean;
 	backdrop_path?: string;
 	genre_ids: number[];
@@ -403,9 +403,9 @@ interface TMovieSearchData {
 	video: boolean;
 	vote_average: number;
 	vote_count: number;
-}
+};
 
-interface TTVShowsSearchData {
+type TTVShowsSearchData = {
 	adult: boolean;
 	backdrop_path?: string;
 	genre_ids: number[];
@@ -420,9 +420,9 @@ interface TTVShowsSearchData {
 	name: string;
 	vote_average: number;
 	vote_count: number;
-}
+};
 
-interface TPersonSearchData {
+type TPersonSearchData = {
 	adult: boolean;
 	gender: number;
 	id: number;
@@ -432,29 +432,29 @@ interface TPersonSearchData {
 	popularity: number;
 	profile_path?: string;
 	known_for: KnownFor[];
-}
+};
 
-interface KnownFor {
-	backdrop_path?: string;
-	id: number;
-	name?: string;
-	original_name?: string;
-	overview: string;
-	poster_path: string;
-	media_type: string;
-	adult: boolean;
-	original_language: string;
-	genre_ids: number[];
-	popularity: number;
-	first_air_date?: string;
-	vote_average: number;
-	vote_count: number;
-	origin_country?: string[];
-	title?: string;
-	original_title?: string;
-	release_date?: string;
-	video?: boolean;
-}
+// interface KnownFor {
+// 	backdrop_path?: string;
+// 	id: number;
+// 	name?: string;
+// 	original_name?: string;
+// 	overview: string;
+// 	poster_path: string;
+// 	media_type: string;
+// 	adult: boolean;
+// 	original_language: string;
+// 	genre_ids: number[];
+// 	popularity: number;
+// 	first_air_date?: string;
+// 	vote_average: number;
+// 	vote_count: number;
+// 	origin_country?: string[];
+// 	title?: string;
+// 	original_title?: string;
+// 	release_date?: string;
+// 	video?: boolean;
+// }
 
 export type TMovieSearch = PaginatedResponse<TMovieSearchData>;
 export type TTVShowsSearch = PaginatedResponse<TTVShowsSearchData>;
@@ -503,21 +503,22 @@ export type BaseMovieTV = {
 	poster_path: string;
 	vote_average: number;
 	vote_count: number;
+	isFavourite?: boolean;
 } & (MovieData | TVData);
 
-interface MovieData {
+type MovieData = {
 	original_title: string;
 	release_date: string;
 	title: string;
 	video: boolean;
-}
+};
 
-interface TVData {
+type TVData = {
 	origin_country: string[];
 	original_name: string;
 	first_air_date: string;
 	name: string;
-}
+};
 
 export function isMovieData(obj: BaseMovieTV): obj is BaseMovieTV & MovieData {
 	return (
@@ -561,26 +562,26 @@ export interface TProfile {
 	username: string;
 }
 
-export interface Avatar {
+type Avatar = {
 	gravatar: Gravatar;
 	tmdb: Tmdb;
-}
+};
 
-export interface Gravatar {
+type Gravatar = {
 	hash: string;
-}
+};
 
-export interface Tmdb {
+type Tmdb = {
 	avatar_path: string | null;
-}
+};
 
 //===========================Watch Provider=========================================
 export type TWatchProvider = {
 	id: number;
-	results: Partial< watchProviderData>;
+	results: Partial<watchProviderData>;
 };
 
-interface watchProviderData {
+type watchProviderData = {
 	AD: baseProvider;
 	AE: baseProvider;
 	AG: baseProvider;
@@ -700,7 +701,7 @@ interface watchProviderData {
 	XK: baseProvider;
 	YE: baseProvider;
 	ZA: baseProvider;
-}
+};
 
 type baseProvider = {
 	link: string;
@@ -715,3 +716,15 @@ export interface providerData {
 	display_priority: number;
 }
 
+export type TBaseAction = {
+	media_type: 'movie' | 'tv';
+	media_id: number;
+} & (TFavouriteAction | TWatchlistAction);
+
+type TFavouriteAction = {
+	favorite: boolean;
+};
+
+type TWatchlistAction = {
+	watchlist: boolean;
+};

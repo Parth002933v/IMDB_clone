@@ -10,6 +10,7 @@ export default [
 	index('./routes/home.tsx'),
 	route('remote/panel', './routes/remote/api/trendingMovies.tsx'),
 	route('login', './routes/auth/login.tsx'),
+	route('login2', './routes/auth/login2.tsx'),
 	route('logout', './routes/auth/logout.tsx'),
 
 	route('u/:username', './routes/profile/profile.tsx', [

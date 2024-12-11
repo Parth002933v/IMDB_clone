@@ -20,7 +20,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 	cookieSession.unset('session_id');
 
 	return redirect('/', {
-
 		headers: {
 			'Cache-Control': 'no-store',
 			'Set-Cookie': await cookieSessionStorage.commitSession(cookieSession),

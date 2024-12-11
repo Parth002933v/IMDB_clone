@@ -4,7 +4,7 @@ import { isRouteErrorResponse, MetaFunction } from 'react-router';
 import MoviesScrollList from '~/components/home/moviesScrollList';
 import Banner from '~/components/home/banner';
 import Trailers from '~/components/home/Trailers';
-import { GetFreeShow, GetPopularMovies, GetTrendingMovies } from '~/lib/api';
+import { GetFreeShow, GetPopularMovies, GetTrendingMedia } from '~/lib/api';
 import { isMovieData, TMovieTV, TTrendingMovieTV } from '~/tyoes';
 import useCustomFetcher from '~/hooks/useCustomFetcher';
 import { getRandomInt } from '~/lib/utils';
@@ -41,7 +41,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-	const trendingMovies = await GetTrendingMovies('day');
+	const trendingMovies = await GetTrendingMedia("all",'day');
 	const popularMovies = await GetPopularMovies('streaming');
 	const freeToWatch = await GetFreeShow('movie');
 

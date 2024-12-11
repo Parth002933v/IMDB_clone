@@ -3,7 +3,6 @@ import {
 	FreeToWatchGroupType,
 	PopularMovieGroupType,
 	SearchMediaType,
-	TApiError,
 	TCastCrew,
 	TMovieTV,
 	TProfile,
@@ -15,19 +14,20 @@ import {
 } from '~/tyoes';
 import { axios } from '~/lib/apiHandler';
 import { BASE_URL } from '~/lib/constant';
+import { AxiosResponse } from 'axios';
 // 20429186
 
-export const GetTrendingMovies = (by: TrendingMovieGroupType) => {
+export const GetTrendingMedia = (
+	mediaType: 'movie' | 'tv' | 'all',
+	by: TrendingMovieGroupType
+) => {
 	const params = new URLSearchParams();
-	params.set("sort_by","popularity.desc")
-	// url.searchParams.append('watch_region', 'IN');
-	// url.searchParams.append('language', 'hi-IN');
-	params.set("watch_region","IN")
-	params.set("language","hi-IN")
-
+	params.set('sort_by', 'popularity.desc');
+	params.set('watch_region', 'IN');
+	params.set('language', 'hi-IN');
 
 	return axios.get<TTrendingMovieTV>(
-		`${BASE_URL}/trending/all/${by}?${params}`
+		`${BASE_URL}/trending/${mediaType}/${by}?${params}`
 	);
 };
 
@@ -35,8 +35,8 @@ export const GetPopularMovies = (by: PopularMovieGroupType) => {
 	let baseURL = `${BASE_URL}/discover/movie`;
 	const params = new URLSearchParams();
 
-	params.set("watch_region","IN")
-	params.set("language","hi-IN")
+	params.set('watch_region', 'IN');
+	params.set('language', 'hi-IN');
 	switch (by) {
 		case 'streaming':
 			params.set('with_watch_monetization_types', 'flatrate');
@@ -64,8 +64,8 @@ export const GetFreeShow = (by: FreeToWatchGroupType) => {
 
 	const params = new URLSearchParams();
 	params.set('with_watch_monetization_types', 'free');
-	params.set("watch_region","IN")
-	params.set("language","hi-IN")
+	params.set('watch_region', 'IN');
+	params.set('language', 'hi-IN');
 	// params.set('watch_region', 'IN');
 	// params.set('language', 'en-US');
 
@@ -78,9 +78,15 @@ export const GetMovieTVById = (id: string, mediaType: 'movie' | 'tv') => {
 	param.set('language', 'en-US');
 
 	if (mediaType === 'movie') {
-		param.set( 'append_to_response', `${['release_dates', 'credits', 'watch/providers'].join(',')}`);
+		param.set(
+			'append_to_response',
+			`${['release_dates', 'credits', 'watch/providers'].join(',')}`
+		);
 	} else if (mediaType === 'tv') {
-		param.set( 'append_to_response', `${['content_ratings', 'credits', 'watch/providers'].join(',')}`);
+		param.set(
+			'append_to_response',
+			`${['content_ratings', 'credits', 'watch/providers'].join(',')}`
+		);
 	}
 
 	return axios.get<BaseMediaDetails>(`${baseUrl}?${param.toString()}`);
@@ -162,3 +168,29 @@ export const GetWatchProvider = (mediaType: 'tv' | 'movie', mediaID: string) => 
 	return axios.get<TWatchProvider>(baseUrl);
 };
 
+export const GetRecommendedMedia = async (mediaType: 'movie' | 'tv') => {
+	let trendingMovie: AxiosResponse<TTrendingMovieTV, any>;
+
+	if (mediaType === 'tv') {
+		trendingMovie = await GetTrendingMedia('tv', 'week');
+	} else {
+		trendingMovie = await GetTrendingMedia('movie', 'week');
+	}
+
+	const baseUrl = `${BASE_URL}/${mediaType}/${trendingMovie.data.results[0].id}/recommendations`;
+
+	const params = new URLSearchParams();
+	params.set('sort_by', 'popularity.desc');
+	params.set('watch_region', 'IN');
+
+	return axios.get<TMovieTV>(`${baseUrl}?${params}`);
+};
+
+export const GetFavoritesMedia = (
+	mediaType: 'movies' | 'tv',
+	userID: number | undefined
+) => {
+	const baseurl = `${BASE_URL}/account/${userID}/favorite/${mediaType}`;
+
+	return axios.get<TMovieTV>(baseurl);
+};

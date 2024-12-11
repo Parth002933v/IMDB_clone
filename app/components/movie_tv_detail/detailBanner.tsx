@@ -9,13 +9,13 @@ import { Popover } from 'flowbite-react';
 import { useOutletContext } from 'react-router';
 
 interface DetailBannerProps {
-	data: BaseMediaDetails;
+	detailMediaData: BaseMediaDetails;
 	importantCrews: { name: string; jobs: string[] }[];
 	provider?: providerData;
 }
 
 const DetailBanner = ({
-	data: media,
+	detailMediaData: media,
 	importantCrews,
 	provider,
 }: DetailBannerProps) => {

@@ -1,10 +1,11 @@
 import {
+	data,
 	isRouteErrorResponse,
 	Links,
 	Meta,
-	Outlet,
+	Outlet, redirectDocument,
 	Scripts,
-	ScrollRestoration,
+	ScrollRestoration, UNSAFE_DataWithResponseInit,
 } from 'react-router';
 
 import './app.css';
@@ -14,10 +15,11 @@ import { Route } from '../.react-router/types/app/+types/root';
 import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 import React, { useRef } from 'react';
 import { LoaderContext } from '~/hooks/useLoader';
-import { GetUserDetails } from '~/lib/api';
-import { cookieSessionStorage } from '~/lib/sessionStorage';
+import { createRequestToken, CreateSessionId, GetUserDetails, login } from '~/lib/api';
+import { cookieSessionStorage, getCookieSessionFromHeader } from '~/lib/sessionStorage';
 import { axios } from '~/lib/apiHandler';
-import { TApiErrorSchema, TProfile } from '~/tyoes';
+import { TBaseApiResponseSchema } from '~/tyoes';
+
 
 export const links: Route.LinksFunction = () => [
 	{ rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -60,16 +62,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 // }
 
 export async function loader({ request }: Route.LoaderArgs) {
-	const cookieSession = await cookieSessionStorage.getSession(
-		request.headers.get('Cookie')
-	);
+	console.log("in root loader");
+	const cookieSession = await getCookieSessionFromHeader(request);
 
-	const id = axios.interceptors.request.use(async config => {
-		const url = new URL(config.url || '');
-		url.searchParams.append('session_id', cookieSession.get('session_id'));
-		config.url = url.toString();
-		return config;
-	});
+	console.log("in root loader=>", cookieSession.get('session_id'));
+	// const id = axios.interceptors.request.use(async config => {
+	// 	const url = new URL(config.url || '');
+	// 	url.searchParams.append('session_id', cookieSession.get('session_id'));
+	// 	config.url = url.toString();
+	// 	return config;
+	// });
 	// console.log(
 	// 	'loader in navbar',
 	// 	cookieSession.get('session_id'),
@@ -77,6 +79,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	// );
 
 	const profileDetail = await GetUserDetails();
+	console.log("profileDetail in root loader", profileDetail);
 	// console.log('profileDetail', profileDetail, 'profileDetail');
 
 	//
@@ -90,13 +93,22 @@ export async function loader({ request }: Route.LoaderArgs) {
 	// 	return undefined;
 	// }
 
-	// axios.interceptors.request.eject(id);
-	return profileDetail?.data;
+	if (!profileDetail || !profileDetail.data) {
+		return undefined;
+	}
+
+	axios.interceptors.request.eject(id);
+	return profileDetail.data;
 }
 
-export default function App({ loaderData }: Route.ComponentProps) {
+
+
+
+
+export default function App({ loaderData, matches }: Route.ComponentProps) {
 	const loaderRef = useRef<LoadingBarRef | null>(null);
 
+	// console.log(matches);
 	return (
 		<React.Suspense fallback={<div>Loading...</div>}>
 			<LoaderContext.Provider value={{ loaderRef: loaderRef }}>
@@ -114,7 +126,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	const APIError = TApiErrorSchema.safeParse(error || '');
+	const APIError = TBaseApiResponseSchema.safeParse(error || '');
 	if (APIError.success) {
 		return (
 			<div className="flex min-h-screen items-center justify-center bg-gray-100 p-6">

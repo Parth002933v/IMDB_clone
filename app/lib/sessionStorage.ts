@@ -5,13 +5,16 @@ export const cookieSessionStorage = createCookieSessionStorage({
 		name: 'session_id',
 		// httpOnly: true,
 		// sameSite: 'strict',
-		path: '/',
+		// path: '/',
 		maxAge: 60 * 60 * 24,
 	},
 });
 
-export const getCookieSessionFromHeader = async (request: Request) =>
-	await cookieSessionStorage.getSession(request.headers.get('Cookie'));
+export const getCookieSessionFromHeader = async (request: Request) =>{
+
+	const session = await cookieSessionStorage.getSession(request.headers.get('Cookie'));
+	return session.get<string>("session_id")
+}
 
 export async function deleteCookieSession(request: Request) {
 	const session = await sessionStorage.getSession(request.headers.get('Cookie'));
