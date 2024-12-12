@@ -132,6 +132,7 @@ const NavBar = ({ profileData }: NavBarProps) => {
 					</button>
 				</div>
 			</div>
+
 		</div>
 	);
 };
