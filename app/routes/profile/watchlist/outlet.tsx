@@ -1,31 +1,29 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router';
 import { twMerge } from 'tailwind-merge';
-import { Route } from '../../../../.react-router/types/app/routes/profile/recommendation/+types/Outlet';
+import { Route } from '../../../../.react-router/types/app/routes/profile/watchlist/+types/Outlet';
 
-const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
+const watchlistOutlet = ({ matches, params }: Route.ComponentProps) => {
 	const currentPath = matches[matches.length - 1]?.pathname;
 
-	const isRootProfileAndRecomendation =
-		currentPath == `/u/${params.username}/` ||
-		currentPath == `/u/${params.username}/recommendations`;
+	const isRootProfileAndWatchlist =
+		currentPath == `/u/${params.username}/watchlist` ||
+		currentPath == `/u/${params.username}/watchlist/movie`;
 
 	return (
 		<div className="flex h-full w-full flex-col gap-3 py-5">
 			<div className="flex w-full justify-between px-5">
-				<div className="font-bold ">My Recommendations</div>
+				<div className="font-bold">My Recommendations</div>
 
 				<div className="flex gap-3 font-light">
-					<NavLink to={'./recommendations/movie'}>
+					<NavLink to={'./watchlist/movie'}>
 						{({ isActive, isPending, isTransitioning }) => (
 							<div
 								className={twMerge(
 									// 'border-none',
-									isRootProfileAndRecomendation &&
+									isRootProfileAndWatchlist &&
 										`border-b-4 border-[#01b4e4]`,
-									!isRootProfileAndRecomendation &&
-										!isActive &&
-										`border-none`
+									!isRootProfileAndWatchlist && !isActive && `border-none`
 								)}
 							>
 								Movie
@@ -33,7 +31,7 @@ const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
 						)}
 					</NavLink>
 
-					<NavLink to={'./recommendations/tv'}>
+					<NavLink to={'./watchlist/tv'}>
 						{({ isActive, isPending, isTransitioning }) => (
 							<div
 								className={twMerge(
@@ -52,7 +50,7 @@ const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
 	);
 };
 
-export default ProfileOutlet;
+export default watchlistOutlet;
 
 // [
 //   {

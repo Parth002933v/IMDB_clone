@@ -1,5 +1,5 @@
 import React from 'react';
-import { data, Link, Outlet } from 'react-router';
+import { data, Link, NavLink, Outlet } from 'react-router';
 import { twMerge } from 'tailwind-merge';
 import { Route } from '../../../.react-router/types/app/routes/profile/+types/profile';
 import { GetUserDetails } from '~/lib/api';
@@ -7,19 +7,16 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuGroup,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuPortal,
-	DropdownMenuSeparator,
-	DropdownMenuShortcut,
-	DropdownMenuSub,
-	DropdownMenuSubContent,
-	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
+import { getCookieSessionFromHeader } from '~/lib/sessionStorage';
+import { TProfile } from '~/tyoes';
 
-export async function loader({ request, params }: Route.LoaderArgs) {
+export async function loader({
+	request,
+	params,
+}: Route.LoaderArgs): Promise<TProfile> {
 	// const cookieSession = await cookieSessionStorage.getSession(
 	// 	request.headers.get('Cookie')
 	// );
@@ -35,11 +32,12 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	// 	cookieSession.get('session_id'),
 	// 	'====loader in navbar'
 	// );
+	const cookieSession = await getCookieSessionFromHeader(request);
 
-	const profileDetail = await GetUserDetails();
-	console.log(profileDetail);
+	const profileDetail = await GetUserDetails(cookieSession);
+	// console.log(profileDetail);
 
-	if (!profileDetail || !profileDetail.data) {
+	if (!profileDetail.data) {
 		throw data('Invalid User Profile please try to login ', { status: 404 });
 	} else if (profileDetail.data.username !== params.username) {
 		throw data('Invalid User Profile', { status: 404 });
@@ -74,12 +72,7 @@ type FilterCategory = {
 };
 
 const FilterList: FilterCategory[] = [
-	{
-		key: 1,
-		lable: 'Favorites',
-		link: './favorites',
-		items: [{ lable: 'Movies' }, { lable: 'TV Shows' }],
-	},
+
 	{
 		key: 2,
 		lable: 'Recommendations',
@@ -95,19 +88,29 @@ const FilterList: FilterCategory[] = [
 		],
 	},
 	{
-		key: 3,
-		lable: 'Ratings',
+		key: 1,
+		lable: 'Favorites',
+		link: './favorites',
 		items: [
-			{
-				lable: 'Movies',
-				link: './ratings',
-			},
-			{
-				lable: 'TV Shows',
-				link: './ratings/tv',
-			},
+			{ lable: 'Movies', link: './favourite' },
+			{ lable: 'TV Shows', link: './favourite/tv' },
 		],
 	},
+
+	// {
+	// 	key: 3,
+	// 	lable: 'Ratings',
+	// 	items: [
+	// 		{
+	// 			lable: 'Movies',
+	// 			link: './ratings',
+	// 		},
+	// 		{
+	// 			lable: 'TV Shows',
+	// 			link: './ratings/tv',
+	// 		},
+	// 	],
+	// },
 	{
 		key: 4,
 		lable: 'Watchlist',
@@ -124,7 +127,7 @@ const FilterList: FilterCategory[] = [
 	},
 ];
 
-const Profile = ({ loaderData }: Route.ComponentProps) => {
+const Profile = ({ loaderData, params }: Route.ComponentProps) => {
 	// const outletData: TProfile = useOutletContext();
 
 	const profile = loaderData;
@@ -133,7 +136,7 @@ const Profile = ({ loaderData }: Route.ComponentProps) => {
 		<div className="h-full w-full">
 			<div
 				key="profile"
-				className="mx-auto flex h-28 max-w-[1350px] items-center justify-center gap-3 "
+				className="mx-auto flex h-28 max-w-[1350px] items-center justify-center gap-3"
 			>
 				<button
 					key="avatar"
@@ -171,9 +174,10 @@ const Profile = ({ loaderData }: Route.ComponentProps) => {
 					{profile.username}
 				</div>
 			</div>
+
 			<div
 				key="menu"
-				className="flex h-10 w-full gap-2 overflow-scroll border-b font-light"
+				className="flex h-10 w-full gap-2 max-md:overflow-scroll border-b font-light md:justify-center"
 			>
 				{FilterList.map(item => (
 					<DropdownMenu key={item.key}>
@@ -192,9 +196,7 @@ const Profile = ({ loaderData }: Route.ComponentProps) => {
 							<DropdownMenuContent>
 								{item.items.map(i => (
 									<DropdownMenuItem key={i.lable}>
-										<Link to={i.link|| "#"}	>
-											{i.lable}
-										</Link>
+										<NavLink to={i.link || '#'}>{i.lable}</NavLink>
 									</DropdownMenuItem>
 								))}
 							</DropdownMenuContent>
@@ -203,7 +205,11 @@ const Profile = ({ loaderData }: Route.ComponentProps) => {
 				))}
 			</div>
 
-			<Outlet/>
+			<div className="max-w-[1350px] justify-center flex flex-col w-full  mx-auto">
+
+				<Outlet />
+
+			</div>
 		</div>
 	);
 };

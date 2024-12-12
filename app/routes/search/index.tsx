@@ -1,12 +1,14 @@
 import React from 'react';
-import { Route } from '../../../.react-router/types/app/routes/search/+types';
 import { useOutletContext } from 'react-router';
 import { MovieSearchComponent } from '~/routes/search/search_movie';
 import { TMovieSearch, TPersonSearch, TTVShowsSearch } from '~/tyoes';
 import { TVSearchComponent } from '~/routes/search/search_tv';
 import { PeopleSearchComponent } from '~/routes/search/search_people';
+import { Route } from '../../../.react-router/types/app/routes/search/+types';
+// import { Route } from '../../../.react-router/types/app/routes/search/+types/search';
 
-const Index = ({ matches }: Route.ComponentProps) => {
+const Index = ({ }: Route.ComponentProps) => {
+
 	const outlet: {
 		data: {
 			searchedMovies: TMovieSearch;

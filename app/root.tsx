@@ -3,9 +3,11 @@ import {
 	isRouteErrorResponse,
 	Links,
 	Meta,
-	Outlet, redirectDocument,
+	Outlet,
+	redirectDocument,
 	Scripts,
-	ScrollRestoration, UNSAFE_DataWithResponseInit,
+	ScrollRestoration,
+	UNSAFE_DataWithResponseInit,
 } from 'react-router';
 
 import './app.css';
@@ -15,11 +17,18 @@ import { Route } from '../.react-router/types/app/+types/root';
 import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 import React, { useRef } from 'react';
 import { LoaderContext } from '~/hooks/useLoader';
-import { createRequestToken, CreateSessionId, GetUserDetails, login } from '~/lib/api';
-import { cookieSessionStorage, getCookieSessionFromHeader } from '~/lib/sessionStorage';
+import {
+	createRequestToken,
+	CreateSessionId,
+	GetUserDetails,
+	login,
+} from '~/lib/api';
+import {
+	cookieSessionStorage,
+	getCookieSessionFromHeader,
+} from '~/lib/sessionStorage';
 import { axios } from '~/lib/apiHandler';
 import { TBaseApiResponseSchema } from '~/tyoes';
-
 
 export const links: Route.LinksFunction = () => [
 	{ rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -62,10 +71,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 // }
 
 export async function loader({ request }: Route.LoaderArgs) {
-	console.log("in root loader");
+	// console.log('in root loader');
 	const cookieSession = await getCookieSessionFromHeader(request);
 
-	console.log("in root loader=>", cookieSession.get('session_id'));
+	// console.log('in root loader=>', cookieSession);
 	// const id = axios.interceptors.request.use(async config => {
 	// 	const url = new URL(config.url || '');
 	// 	url.searchParams.append('session_id', cookieSession.get('session_id'));
@@ -78,8 +87,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 	// 	'====loader in navbar'
 	// );
 
-	const profileDetail = await GetUserDetails();
-	console.log("profileDetail in root loader", profileDetail);
+	const profileDetail = await GetUserDetails(cookieSession);
+	// console.log('profileDetail in root loader', profileDetail.data);
 	// console.log('profileDetail', profileDetail, 'profileDetail');
 
 	//
@@ -97,13 +106,9 @@ export async function loader({ request }: Route.LoaderArgs) {
 		return undefined;
 	}
 
-	axios.interceptors.request.eject(id);
+	// axios.interceptors.request.eject(id);
 	return profileDetail.data;
 }
-
-
-
-
 
 export default function App({ loaderData, matches }: Route.ComponentProps) {
 	const loaderRef = useRef<LoadingBarRef | null>(null);
@@ -169,7 +174,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 			</div>
 		);
 	} else {
-		return <h1>Unknown Error</h1>;
+		return <h1>"unknown"</h1>;
 	}
 	// } else if(TApiErrorSchema) {
 	// 	return <h1>{error.status_message}</h1>;

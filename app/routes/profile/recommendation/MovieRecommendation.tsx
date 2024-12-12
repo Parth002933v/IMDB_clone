@@ -1,22 +1,45 @@
 import React from 'react';
 import { Route } from '../../../../.react-router/types/app/routes/profile/recommendation/+types/MovieRecommendation';
-import RecommendationCard from '~/components/recomendation/reomendationCard';
-import { GetFavoritesMedia, GetRecommendedMedia, GetUserDetails } from '~/lib/api';
+import ProfileMediaCard from '~/components/profileMediaCard';
+import {
+	GetFavoritesMedia,
+	GetRecommendedMedia,
+	GetUserDetails,
+	GetWatchlistMedia,
+} from '~/lib/api';
 import { TMovieTV } from '~/tyoes';
+import { getCookieSessionFromHeader } from '~/lib/sessionStorage';
 
-export async function loader({}: Route.LoaderArgs) {
+export async function loaderAPI(request: Request) {
 	const recommendedMovie = await GetRecommendedMedia('movie');
 
-	const profileDetail = await GetUserDetails();
+	const cookieSession = await getCookieSessionFromHeader(request);
+	const profileDetail = await GetUserDetails(cookieSession);
+	// console.log('in movie recommendation ',profileDetail.data,'in movieRcomendation');
 
 	if (profileDetail.data === undefined) {
 		return;
 	}
-	console.log(profileDetail);
+
+	// console.log(profileDetail);
 	const usersFavouriteMovie = await GetFavoritesMedia(
+		cookieSession,
 		'movies',
 		profileDetail.data.id
 	);
+
+	const userWatchlistMovies = await GetWatchlistMedia(
+		cookieSession,
+		'movies',
+		profileDetail.data.id
+	);
+
+	if (
+		usersFavouriteMovie.data === undefined ||
+		userWatchlistMovies.data === undefined
+	) {
+		return;
+	}
 
 	usersFavouriteMovie.data.results.forEach(fav => {
 		const match = recommendedMovie.data.results.find(rco => rco.id === fav.id);
@@ -24,43 +47,18 @@ export async function loader({}: Route.LoaderArgs) {
 			match.isFavourite = true;
 		}
 	});
+	userWatchlistMovies.data.results.forEach(wal => {
+		const match = recommendedMovie.data.results.find(rco => rco.id === wal.id);
+		if (match) {
+			match.isWatchListed = true;
+		}
+	});
 
-	console.log('in laoder');
 	return recommendedMovie.data;
 }
 
-export async function action({ request, params, context }: Route.ActionArgs) {
-	console.log('in action');
-	// const formData = new URLSearchParams(await request.text());
-
-	// let payload: TBaseAction;
-	// const formData = await request.formData();
-	//
-	// const media_type = formData.get('media_type') as 'movie' | 'tv';
-	// const media_id = parseInt((formData.get('media_id') as string) || '0', 10);
-	// const favorite = formData.has('favorite')
-	// 	? formData.get('favorite') === 'true'
-	// 	: undefined;
-	// const watchlist = formData.has('watchlist')
-	// 	? formData.get('watchlist') === 'true'
-	// 	: undefined;
-	//
-	// if (favorite) {
-	// 	payload = {
-	// 		media_type: media_type,
-	// 		media_id: media_id,
-	// 		favorite: favorite,
-	// 	};
-	// } else if (watchlist) {
-	// 	payload = {
-	// 		media_type: media_type,
-	// 		media_id: media_id,
-	// 		watchlist: watchlist,
-	//
-	// 	};
-	// 	console.log(formData.get('favorite'));
-	// 	console.log(payload);
-	// }
+export async function loader({ request }: Route.LoaderArgs) {
+	return await loaderAPI(request);
 }
 
 const MovieRecommendation = ({ loaderData }: Route.ComponentProps) => {
@@ -81,9 +79,6 @@ export const MovieRecommendationComponent = ({
 	movieData,
 }: MovieRecommendationComponentProps) => (
 	<div className="flex h-full w-full flex-col gap-4 px-5">
-		{/*{data && ({*/}
-		{movieData?.results.map(m => <RecommendationCard key={m.id} cardData={m} />)}
-
-		{/*})}*/}
+		{movieData?.results.map(m => <ProfileMediaCard key={m.id} cardData={m} />)}
 	</div>
 );

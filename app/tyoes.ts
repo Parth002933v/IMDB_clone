@@ -504,6 +504,7 @@ export type BaseMovieTV = {
 	vote_average: number;
 	vote_count: number;
 	isFavourite?: boolean;
+	isWatchListed?: boolean;
 } & (MovieData | TVData);
 
 type MovieData = {
@@ -722,9 +723,11 @@ export type TBaseAction = {
 } & (TFavouriteAction | TWatchlistAction);
 
 type TFavouriteAction = {
+	'x-type'?: 'favorite';
 	favorite: boolean;
 };
 
 type TWatchlistAction = {
+	'x-type'?: 'watchlist';
 	watchlist: boolean;
 };

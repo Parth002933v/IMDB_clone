@@ -10,12 +10,17 @@ export const cookieSessionStorage = createCookieSessionStorage({
 	},
 });
 
-export const getCookieSessionFromHeader = async (request: Request) =>{
+export const getCookieSessionFromHeader = async (request: Request):Promise<string> =>{
 
 	const session = await cookieSessionStorage.getSession(request.headers.get('Cookie'));
 	return session.get<string>("session_id")
 }
 
+export const getCookieSessionFromHeader2 = async (request: Request) =>{
+
+	const session = await cookieSessionStorage.getSession(request.headers.get('Cookie'));
+	return session
+}
 export async function deleteCookieSession(request: Request) {
 	const session = await sessionStorage.getSession(request.headers.get('Cookie'));
 	session.unset('session_id');

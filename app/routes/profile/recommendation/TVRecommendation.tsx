@@ -1,22 +1,54 @@
 import React from 'react';
-import RecommendationCard from '~/components/recomendation/reomendationCard';
+import ProfileMediaCard from '~/components/profileMediaCard';
 import { Route } from '../../../../.react-router/types/app/routes/profile/recommendation/+types/TVRecommendation';
-import { GetFavoritesMedia, GetRecommendedMedia, GetUserDetails } from '~/lib/api';
+import { GetFavoritesMedia, GetRecommendedMedia, GetUserDetails, GetWatchlistMedia } from '~/lib/api';
+import { getCookieSessionFromHeader } from '~/lib/sessionStorage';
 
-export async function loader({}: Route.LoaderArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
 	const recommendedMovie = await GetRecommendedMedia('tv');
 
-	const profileDetail = await GetUserDetails();
+	const cookieSesstion = await getCookieSessionFromHeader(request);
+
+	const profileDetail = await GetUserDetails(cookieSesstion);
 	if (profileDetail.data === undefined) {
 		return;
 	}
 
-	const usersFavouriteMovie = await GetFavoritesMedia('tv', profileDetail!.data.id);
+	const usersFavouriteMovie = await GetFavoritesMedia(
+		cookieSesstion,
+		'tv',
+		profileDetail.data.id
+	);
+	const userWatchlistMovies = await GetWatchlistMedia(
+		cookieSesstion,
+		'tv',
+		profileDetail.data.id
+	);
+
+	if (
+		usersFavouriteMovie.data === undefined ||
+		userWatchlistMovies.data === undefined
+	) {
+		return;
+	}
+	usersFavouriteMovie.data.results.forEach(fav => {
+		const match = recommendedMovie.data.results.find(rco => rco.id === fav.id);
+		if (match) {
+			match.isFavourite = true;
+		}
+	});
+
 
 	usersFavouriteMovie.data.results.forEach(fav => {
 		const match = recommendedMovie.data.results.find(rco => rco.id === fav.id);
 		if (match) {
 			match.isFavourite = true;
+		}
+	});
+	userWatchlistMovies.data.results.forEach(wal => {
+		const match = recommendedMovie.data.results.find(rco => rco.id === wal.id);
+		if (match) {
+			match.isWatchListed = true;
 		}
 	});
 
@@ -30,7 +62,7 @@ const TVRecommendation = ({ loaderData }: Route.ComponentProps) => {
 	return (
 		<div className="flex h-full w-full flex-col gap-4 px-5">
 			{loaderData.results.map(m => (
-				<RecommendationCard key={m.id} cardData={m} />
+				<ProfileMediaCard key={m.id} cardData={m} />
 			))}
 		</div>
 	);

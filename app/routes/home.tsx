@@ -41,7 +41,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-	const trendingMovies = await GetTrendingMedia("all",'day');
+	const trendingMovies = await GetTrendingMedia('all', 'day');
 	const popularMovies = await GetPopularMovies('streaming');
 	const freeToWatch = await GetFreeShow('movie');
 
@@ -105,7 +105,9 @@ const Home = ({ loaderData }: Route.ComponentProps) => {
 							if (value === 'Today') param.set('group', 'day');
 							if (value === 'This Week') param.set('group', 'week');
 
-							trendingMovieFetcher.load(`/remote/panel?${param.toString()}`);
+							trendingMovieFetcher.load(
+								`api/remote/panel?${param.toString()}`
+							);
 						}}
 						movieList={trendingMovieData.results}
 						menuItems={['Today', 'This Week']}
@@ -130,7 +132,7 @@ const Home = ({ loaderData }: Route.ComponentProps) => {
 						if (value === 'For Rent') param.set('group', 'for-rent');
 						if (value === 'In Theaters') param.set('group', 'in-theatres');
 
-						popularMovieFetcher.load(`/remote/panel?${param.toString()}`);
+						popularMovieFetcher.load(`api/remote/panel?${param.toString()}`);
 					}}
 				/>
 
@@ -150,7 +152,9 @@ const Home = ({ loaderData }: Route.ComponentProps) => {
 						if (value === 'Movies') param.set('group', 'movie');
 						if (value === 'TV') param.set('group', 'tv');
 
-						freeToWatchMovieFetcher.load(`/remote/panel?${param.toString()}`);
+						freeToWatchMovieFetcher.load(
+							`api/remote/panel?${param.toString()}`
+						);
 					}}
 				/>
 			</div>

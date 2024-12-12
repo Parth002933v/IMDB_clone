@@ -3,6 +3,8 @@ import {
 	FreeToWatchGroupType,
 	PopularMovieGroupType,
 	SearchMediaType,
+	TBaseAction,
+	TBaseApiResponse,
 	TCastCrew,
 	TMovieTV,
 	TProfile,
@@ -21,6 +23,7 @@ export const GetTrendingMedia = (
 	mediaType: 'movie' | 'tv' | 'all',
 	by: TrendingMovieGroupType
 ) => {
+
 	const params = new URLSearchParams();
 	params.set('sort_by', 'popularity.desc');
 	params.set('watch_region', 'IN');
@@ -153,13 +156,13 @@ export const CreateSessionId = (requestToken: string) => {
 	return axios.post<TSessionSuccess>(baseURL, credential);
 };
 
-export const GetUserDetails = () => {
+export const GetUserDetails = (session_id: string | undefined = undefined) => {
 	const baseUrl = `${BASE_URL}/account`;
 
-	// const params = new URLSearchParams();
-	// params.set('session_id', session_id);
+	const params = new URLSearchParams();
+	params.set('session_id', session_id || 'undefined');
 
-	return axios.get<TProfile | undefined>(`${baseUrl}`);
+	return axios.get<TProfile | undefined>(`${baseUrl}?${params}`);
 };
 
 export const GetWatchProvider = (mediaType: 'tv' | 'movie', mediaID: string) => {
@@ -187,10 +190,65 @@ export const GetRecommendedMedia = async (mediaType: 'movie' | 'tv') => {
 };
 
 export const GetFavoritesMedia = (
+	session_id: string = 'undefined',
 	mediaType: 'movies' | 'tv',
 	userID: number | undefined
 ) => {
 	const baseurl = `${BASE_URL}/account/${userID}/favorite/${mediaType}`;
 
-	return axios.get<TMovieTV>(baseurl);
+	const params = new URLSearchParams();
+	params.set('session_id', session_id.trim().length < 1 ? 'undefined' : session_id);
+
+	return axios.get<TMovieTV | undefined>(`${baseurl}?${params}`);
+};
+
+export const ToggleFavoriteMedia = (
+	payload: TBaseAction,
+	session_id: string,
+	userID: string
+) => {
+	const baseURL = `${BASE_URL}/account/${userID}/favorite`;
+
+	const params = new URLSearchParams();
+	params.set('session_id', session_id);
+
+	return axios.post<TBaseApiResponse>(`${baseURL}?${params}`, payload, {
+		transformRequest: [
+			data => {
+				return JSON.stringify(data);
+			},
+		],
+	});
+};
+
+export const GetWatchlistMedia = (
+	session_id: string = 'undefined',
+	mediaType: 'movies' | 'tv',
+	userID: number | undefined
+) => {
+	const baseurl = `${BASE_URL}/account/${userID}/watchlist/${mediaType}`;
+
+	const params = new URLSearchParams();
+	params.set('session_id', session_id.trim().length < 1 ? 'undefined' : session_id);
+
+	return axios.get<TMovieTV | undefined>(`${baseurl}?${params}`);
+};
+
+export const ToggleWatchlistMedia = (
+	payload: TBaseAction,
+	session_id: string,
+	userID: string
+) => {
+	const baseURL = `${BASE_URL}/account/${userID}/watchlist`;
+
+	const params = new URLSearchParams();
+	params.set('session_id', session_id);
+
+	return axios.post<TBaseApiResponse>(`${baseURL}?${params}`, payload, {
+		transformRequest: [
+			data => {
+				return JSON.stringify(data);
+			},
+		],
+	});
 };

@@ -26,12 +26,8 @@ export function MovieSearchComponent({ outlet }: { outlet: TMovieSearch }) {
 	return (
 		<>
 			{outlet.results.map((e, i) => (
-				<Link
-					to={`/movie/${e.id}`}
-					key={e.id}
-					className="flex h-32 overflow-hidden rounded-lg shadow"
-				>
-					<div className="h-full w-32 overflow-hidden">
+				<div key={e.id} className="flex h-32 overflow-hidden rounded-lg shadow">
+					<Link to={`/movie/${e.id}`} className="h-full w-32 overflow-hidden">
 						<FallbackImage
 							alt={e.title}
 							src={
@@ -41,11 +37,16 @@ export function MovieSearchComponent({ outlet }: { outlet: TMovieSearch }) {
 							}
 							defaultImage="/images/defaultBGImage.svg"
 						/>
-					</div>
+					</Link>
 
 					<div className="flex w-full flex-col justify-between px-3 py-3">
 						<div>
-							<span className="font-semibold">{e.title}</span>
+							<Link
+								to={`/movie/${e.id}`}
+								className="font-semibold hover:text-[#01b4e4]"
+							>
+								{e.title}
+							</Link>
 							<span className="font-light text-gray-500">
 								(<>{e.original_title}</>)
 							</span>
@@ -55,7 +56,7 @@ export function MovieSearchComponent({ outlet }: { outlet: TMovieSearch }) {
 						</div>
 						<p className="line-clamp-2 text-sm">{e.overview}</p>
 					</div>
-				</Link>
+				</div>
 			))}
 
 			<div className="flex w-full justify-center gap-2.5">

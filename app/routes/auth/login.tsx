@@ -12,7 +12,7 @@ import { Route } from '../../../.react-router/types/app/routes/auth/+types/login
 import { createRequestToken, CreateSessionId, login } from '~/lib/api';
 import {
 	cookieSessionStorage,
-	getCookieSessionFromHeader,
+	getCookieSessionFromHeader, getCookieSessionFromHeader2,
 } from '~/lib/sessionStorage';
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -57,7 +57,7 @@ export async function action({
 	const sessionRes = await CreateSessionId(grantedRequestToken.data.request_token);
 
 	// console.log('login', sessionRes.data.session_id, 'login ');
-	const session = await getCookieSessionFromHeader(request);
+	const session = await getCookieSessionFromHeader2(request);
 	session.set('session_id', sessionRes.data.session_id);
 	// await cookieSessionStorage.commitSession(session)
 

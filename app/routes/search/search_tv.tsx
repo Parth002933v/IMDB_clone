@@ -24,12 +24,11 @@ export function TVSearchComponent({ outlet }: { outlet: TTVShowsSearch }) {
 	return (
 		<>
 			{outlet.results.map((e, i) => (
-				<Link
-					to={`/tv/${e.id}`}
+				<div
 					key={e.id}
 					className="flex h-32 overflow-hidden rounded-lg border shadow-md"
 				>
-					<div className="h-full w-28 overflow-hidden">
+					<Link to={`/tv/${e.id}`} className="h-full w-28 overflow-hidden">
 						<FallbackImage
 							className="rounded-none"
 							alt={e.name}
@@ -40,11 +39,16 @@ export function TVSearchComponent({ outlet }: { outlet: TTVShowsSearch }) {
 							}
 							defaultImage="/images/defaultBGImage.svg"
 						/>
-					</div>
+					</Link>
 
 					<div className="flex w-full flex-col justify-between px-3 py-3">
 						<div>
-							<span className="font-semibold">{e.name}</span>
+							<Link
+								to={`/tv/${e.id}`}
+								className="font-semibold hover:text-[#01b4e4]"
+							>
+								{e.name}
+							</Link>
 							<span className="font-light text-gray-500">
 								(<>{e.original_name}</>)
 							</span>
@@ -54,7 +58,7 @@ export function TVSearchComponent({ outlet }: { outlet: TTVShowsSearch }) {
 						</div>
 						<p className="line-clamp-2 text-sm">{e.overview}</p>
 					</div>
-				</Link>
+				</div>
 			))}
 
 			<div className="flex w-full justify-center gap-2.5">

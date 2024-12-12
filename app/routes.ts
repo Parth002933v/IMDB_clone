@@ -8,7 +8,12 @@ import {
 
 export default [
 	index('./routes/home.tsx'),
-	route('remote/panel', './routes/remote/api/trendingMovies.tsx'),
+
+	...prefix('api/remote', [
+		route('panel', './routes/remote/api/trendingMovies.tsx'),
+		route('action', './routes/remote/api/action.tsx'),
+	]),
+
 	route('login', './routes/auth/login.tsx'),
 	route('login2', './routes/auth/login2.tsx'),
 	route('logout', './routes/auth/logout.tsx'),
@@ -16,9 +21,33 @@ export default [
 	route('u/:username', './routes/profile/profile.tsx', [
 		layout('./routes/profile/recommendation/Outlet.tsx', [
 			index('./routes/profile/index.tsx'),
-			route('recommendations', './routes/profile/recommendation/MovieRecommendation.tsx'),
-			route('recommendations/tv', './routes/profile/recommendation/TVRecommendation.tsx'),
-		])
+			...prefix('recommendations', [
+				index('./routes/profile/recommendation/index.tsx'),
+				route(
+					'/movie',
+					'./routes/profile/recommendation/MovieRecommendation.tsx'
+				),
+				route('/tv', './routes/profile/recommendation/TVRecommendation.tsx'),
+			]),
+		]),
+
+		layout('./routes/profile/favourite/Outlet.tsx', [
+			...prefix('favourite', [
+				// route('/', './routes/profile/recommendation/MovieFavourites.tsx'),
+				index('./routes/profile/favourite/index.tsx'),
+				route('/movie', './routes/profile/favourite/MovieFavourites.tsx'),
+				route('/tv', './routes/profile/favourite/TVFavourites.tsx'),
+			]),
+		]),
+
+		layout('./routes/profile/watchlist/Outlet.tsx', [
+			...prefix('watchlist', [
+				// route('/', './routes/profile/recommendation/MovieFavourites.tsx'),
+				index('./routes/profile/watchlist/index.tsx'),
+				route('/movie', './routes/profile/watchlist/MovieWatchlist.tsx'),
+				route('/tv', './routes/profile/watchlist/TVWatchlist.tsx'),
+			]),
+		]),
 	]),
 
 	route('movie/:id', './routes/detail/detail_movie.tsx'),

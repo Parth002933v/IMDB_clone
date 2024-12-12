@@ -6,7 +6,9 @@ import { twMerge } from 'tailwind-merge';
 import { Link } from 'react-router';
 
 interface TrendingProps<T extends string> {
-	movieList: BaseTrendingMovieTV[] | BaseMovieTV[];
+	// movieList: BaseTrendingMovieTV[] | BaseMovieTV[];
+
+	movieList: BaseMovieTV[];
 	navigateParam?: 'movie' | 'tv';
 	title: string;
 	menuItems: T[];
@@ -38,26 +40,29 @@ const MoviesScrollList = <T extends string>({
 					)}
 				></div>
 				<ul className="relative flex h-full w-full gap-5 overflow-x-auto pb-9 pl-6 duration-300 scrollbar scrollbar-track-transparent scrollbar-thumb-gray-100">
-					{movieList.map((data, i) => (
-						<Link
-							viewTransition
-							to={`/${isMovieData(data) ? 'movie' : 'tv'}/${data.id}-${isMovieData(data) ? `${data.title.replaceAll(' ', '-')}` : `${data.name.replaceAll(' ', '-')}`}`}
-							// to={`/${navigateParam ? navigateParam : data.media_type}/${data.id}`}
-							key={data.id}
-						>
-							<MovieCard
+					{movieList.map((data, i) => {
+						const isMovie = isMovieData(data);
+						return (
+							<Link
+								viewTransition
+								to={`/${isMovie ? 'movie' : 'tv'}/${data.id}-${isMovie ? `${data.title.replaceAll(' ', '-')}` : `${data.name.replaceAll(' ', '-')}`}`}
+								// to={`/${navigateParam ? navigateParam : data.media_type}/${data.id}`}
 								key={data.id}
-								imgurl={data.poster_path}
-								movieTitle={isMovieData(data) ? data.title : data.name}
-								releaseDate={
-									isMovieData(data)
-										? data.release_date
-										: data.first_air_date
-								}
-								averageVote={data.vote_average}
-							/>
-						</Link>
-					))}
+							>
+								<MovieCard
+									key={data.id}
+									imgurl={data.poster_path}
+									movieTitle={isMovie ? data.title : data.name}
+									releaseDate={
+									isMovie
+											? data.release_date
+											: data.first_air_date
+									}
+									averageVote={data.vote_average}
+								/>
+							</Link>
+						);
+					})}
 				</ul>
 			</div>
 		</div>

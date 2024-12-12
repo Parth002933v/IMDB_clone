@@ -3,27 +3,27 @@ import { NavLink, Outlet } from 'react-router';
 import { twMerge } from 'tailwind-merge';
 import { Route } from '../../../../.react-router/types/app/routes/profile/recommendation/+types/Outlet';
 
-const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
+const FavouriteMediaOutlet = ({ matches, params }: Route.ComponentProps) => {
 	const currentPath = matches[matches.length - 1]?.pathname;
 
-	const isRootProfileAndRecomendation =
-		currentPath == `/u/${params.username}/` ||
-		currentPath == `/u/${params.username}/recommendations`;
+	const isRootProfileAndFavourite =
+		currentPath == `/u/${params.username}/favourite` ||
+		currentPath == `/u/${params.username}/favourite/movie`;
 
 	return (
 		<div className="flex h-full w-full flex-col gap-3 py-5">
 			<div className="flex w-full justify-between px-5">
-				<div className="font-bold ">My Recommendations</div>
+				<div className="font-bold">My Favourite</div>
 
 				<div className="flex gap-3 font-light">
-					<NavLink to={'./recommendations/movie'}>
+					<NavLink to={'./favourite/movie'}>
 						{({ isActive, isPending, isTransitioning }) => (
 							<div
 								className={twMerge(
 									// 'border-none',
-									isRootProfileAndRecomendation &&
+									isRootProfileAndFavourite &&
 										`border-b-4 border-[#01b4e4]`,
-									!isRootProfileAndRecomendation &&
+									!isRootProfileAndFavourite &&
 										!isActive &&
 										`border-none`
 								)}
@@ -33,7 +33,7 @@ const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
 						)}
 					</NavLink>
 
-					<NavLink to={'./recommendations/tv'}>
+					<NavLink to={'./favourite/tv'}>
 						{({ isActive, isPending, isTransitioning }) => (
 							<div
 								className={twMerge(
@@ -52,7 +52,7 @@ const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
 	);
 };
 
-export default ProfileOutlet;
+export default FavouriteMediaOutlet;
 
 // [
 //   {
