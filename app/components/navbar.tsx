@@ -196,7 +196,7 @@ const ProfileComponent = ({ profileData }: ProfileComponentProps) => {
 			<OptionButton link={'#'} lable={'Discussions'} />
 			<OptionButton link={'#'} lable={'Lists'} />
 			<OptionButton link={'#'} lable={'Ratings'} />
-			<OptionButton link={'#'} lable={'Watchlists'} />
+			<OptionButton link={`./u/${profileData?.username}/watchlist`} lable={'Watchlists'} />
 
 			<hr className="h-0.5 w-full bg-gray-400" />
 

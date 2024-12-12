@@ -8,7 +8,7 @@ const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
 
 	const isRootProfileAndRecomendation =
 		currentPath == `/u/${params.username}/` ||
-		currentPath == `/u/${params.username}/recommendations`;
+		currentPath == `/u/${params.username}/recommendations/movie`;
 
 	return (
 		<div className="flex h-full w-full flex-col gap-3 py-5">
@@ -47,7 +47,7 @@ const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
 				</div>
 			</div>
 
-			<Outlet context={currentPath} />
+			<Outlet  />
 		</div>
 	);
 };

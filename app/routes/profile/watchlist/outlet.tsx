@@ -13,7 +13,7 @@ const watchlistOutlet = ({ matches, params }: Route.ComponentProps) => {
 	return (
 		<div className="flex h-full w-full flex-col gap-3 py-5">
 			<div className="flex w-full justify-between px-5">
-				<div className="font-bold">My Recommendations</div>
+				<div className="font-bold">My Watchlist</div>
 
 				<div className="flex gap-3 font-light">
 					<NavLink to={'./watchlist/movie'}>

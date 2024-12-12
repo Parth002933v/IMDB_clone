@@ -121,7 +121,7 @@ const FilterList: FilterCategory[] = [
 			},
 			{
 				lable: 'TV Shows',
-				link: './watchlists/tv',
+				link: './watchlist/tv',
 			},
 		],
 	},

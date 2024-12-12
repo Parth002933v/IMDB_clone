@@ -43,7 +43,7 @@ const ProfileMediaCard = ({ cardData }: RecommendationCardProps) => {
 		<div className="mx-auto h-60 w-full max-w-[1350px] overflow-hidden rounded-lg border">
 			<div
 				key="poster_detail"
-				className="flex h-full w-full items-center justify-center gap-4 overflow-hidden max-md:h-[60%] max-md:border-b"
+				className="flex h-full w-full items-center justify-start gap-4 overflow-hidden max-md:h-[60%] max-md:border-b"
 			>
 				<PosterItem cardData={cardData} />
 
@@ -72,7 +72,7 @@ const DetailItem = ({ cardData }: { cardData: BaseMovieTV }) => {
 			<Link
 				viewTransition
 				to={`/${isMovie ? 'movie' : 'tv'}/${cardData.id}-${isMovie ? `${cardData.title.replaceAll(' ', '-')}` : `${cardData.name.replaceAll(' ', '-')}`}`}
-				className="font-semibold"
+				className="font-semibold hover:text-[#01b4e4]"
 			>
 				{isMovie ? cardData.title : cardData.name}
 			</Link>
@@ -81,7 +81,7 @@ const DetailItem = ({ cardData }: { cardData: BaseMovieTV }) => {
 					? formatDate(cardData.release_date)
 					: formatDate(cardData.first_air_date)}
 			</div>
-			<p className="mt-4 line-clamp-2 text-[0.80rem]">{cardData.overview}</p>
+			<p className="mt-4 line-clamp-2 text-[0.80rem] ">{cardData.overview}</p>
 		</>
 	);
 };
@@ -95,7 +95,7 @@ const PosterItem = ({ cardData }: { cardData: BaseMovieTV }) => {
 		>
 			<img
 				loading="lazy"
-				className="poster h-full w-full object-cover object-center"
+				className="poster h-full w-full object-cover  object-center"
 				src={`https://media.themoviedb.org/t/p/w130_and_h195_bestv2/${cardData.poster_path}`}
 				srcSet={`https://media.themoviedb.org/t/p/w130_and_h195_bestv2/${cardData.poster_path} 1x, https://media.themoviedb.org/t/p/w260_and_h390_bestv2/${cardData.poster_path} 2x`}
 				alt={isMovie ? cardData.title : cardData.name}
@@ -161,7 +161,8 @@ const ActionItems = ({
 					<div
 						className={twMerge(
 							`flex h-8 w-8 items-center justify-center rounded-full border border-gray-300`,
-							m.isActive && 'bg-gray-500 text-white'
+							m.isActive && 'bg-gray-500 text-white',
+							'cursor-pointer',
 						)}
 						onClick={() => {
 							if (favouriteAndWatchlistMediaFetchState == 'idle') {
