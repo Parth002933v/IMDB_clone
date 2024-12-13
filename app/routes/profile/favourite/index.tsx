@@ -1,5 +1,5 @@
 import React from 'react';
-import { FavouriteMoviesComponenet, laoder } from '~/routes/profile/favourite/MovieFavourites';
+import { FavouriteMoviesComponenet } from '~/routes/profile/favourite/MovieFavourites';
 import { Route } from '../../../../.react-router/types/app/routes/profile/favourite/+types';
 import {loaderAPI} from "./MovieFavourites"
 import { TMovieTV } from '~/tyoes';

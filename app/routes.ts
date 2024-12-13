@@ -30,23 +30,25 @@ export default [
 				route('/tv', './routes/profile/recommendation/TVRecommendation.tsx'),
 			]),
 		]),
+
+		layout('./routes/profile/watchlist/outlet.tsx', [
+			...prefix('watchlist', [
+				index('./routes/profile/watchlist/index.tsx'),
+				route('/movie', './routes/profile/watchlist/MovieWatchlist.tsx'),
+				route('/tv', './routes/profile/watchlist/TVWatchlist.tsx'),
+			]),
+		]),
+
+
 		layout('./routes/profile/favourite/Outlet.tsx', [
 			...prefix('favourite', [
-				// route('/', './routes/profile/recommendation/MovieFavourites.tsx'),
 				index('./routes/profile/favourite/index.tsx'),
 				route('/movie', './routes/profile/favourite/MovieFavourites.tsx'),
 				route('/tv', './routes/profile/favourite/TVFavourites.tsx'),
 			]),
 		]),
 
-		layout('./routes/profile/watchlist/Outlet.tsx', [
-			...prefix('watchlist', [
-				// route('/', './routes/profile/recommendation/MovieFavourites.tsx'),
-				index('./routes/profile/watchlist/index.tsx'),
-				route('/movie', './routes/profile/watchlist/MovieWatchlist.tsx'),
-				route('/tv', './routes/profile/watchlist/TVWatchlist.tsx'),
-			]),
-		]),
+
 	]),
 
 	route('movie/:id', './routes/detail/detail_movie.tsx'),

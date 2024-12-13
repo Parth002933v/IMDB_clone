@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router';
 import { twMerge } from 'tailwind-merge';
-import { Route } from '../../../../.react-router/types/app/routes/profile/recommendation/+types/Outlet';
+import { Route } from '../../../../.react-router/types/app/routes/profile/favourite/+types/Outlet';
 
 const FavouriteMediaOutlet = ({ matches, params }: Route.ComponentProps) => {
 	const currentPath = matches[matches.length - 1]?.pathname;
@@ -23,9 +23,7 @@ const FavouriteMediaOutlet = ({ matches, params }: Route.ComponentProps) => {
 									// 'border-none',
 									isRootProfileAndFavourite &&
 										`border-b-4 border-[#01b4e4]`,
-									!isRootProfileAndFavourite &&
-										!isActive &&
-										`border-none`
+									!isRootProfileAndFavourite && !isActive && `border-none`
 								)}
 							>
 								Movie
@@ -47,7 +45,7 @@ const FavouriteMediaOutlet = ({ matches, params }: Route.ComponentProps) => {
 				</div>
 			</div>
 
-			<Outlet context={currentPath} />
+			<Outlet  />
 		</div>
 	);
 };

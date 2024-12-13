@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router';
-import { twMerge } from 'tailwind-merge';
-import { Route } from '../../../../.react-router/types/app/routes/profile/watchlist/+types/Outlet';
+import { twMerge } from 'tailwind-merge'
+import { Route } from '../../../../.react-router/types/app/routes/profile/watchlist/+types/outlet';
 
-const watchlistOutlet = ({ matches, params }: Route.ComponentProps) => {
+const WatchlistOutlet = ({ matches, params }: Route.ComponentProps) => {
 	const currentPath = matches[matches.length - 1]?.pathname;
 
 	const isRootProfileAndWatchlist =
@@ -45,12 +45,12 @@ const watchlistOutlet = ({ matches, params }: Route.ComponentProps) => {
 				</div>
 			</div>
 
-			<Outlet context={currentPath} />
+			<Outlet />
 		</div>
 	);
 };
 
-export default watchlistOutlet;
+export default WatchlistOutlet;
 
 // [
 //   {
