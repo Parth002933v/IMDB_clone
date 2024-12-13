@@ -24,8 +24,10 @@ export async function loader({ request }: Route.LoaderArgs) {
 			if (!isTrendingMovieGroupType(group)) {
 				throw data('the params is not valid', { status: 400 });
 			} else {
-				const res = await GetTrendingMedia("all",group);
+				const res = await GetTrendingMedia('all', group);
+
 				return res.data;
+
 				// return (await res.json()) as Promise<TTrendingMovie>;
 			}
 		}
