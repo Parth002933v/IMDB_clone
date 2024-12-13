@@ -10,10 +10,10 @@ import { redirect } from 'react-router';
 export async function loader({ request }: Route.LoaderArgs) {
 	const cookieSession = await getCookieSessionFromHeader2(request);
 
-	console.log(cookieSession);
+	// console.log(cookieSession);
 
 	const sessionId: string | undefined = cookieSession.get('session_id');
-	console.log('===', sessionId, '===');
+	// console.log('===', sessionId, '===');
 
 	if (!sessionId) {
 		return redirect('/');

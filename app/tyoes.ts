@@ -119,8 +119,9 @@ export type BaseMediaDetails = {
 	tagline: string;
 	vote_average: number;
 	vote_count: number;
-	credits: TCastCrew;
 	'watch/providers': TWatchProvider;
+	isFavourite?: boolean;
+	isWatchListed?: boolean;
 } & (TMovieDetail | TTVDetail);
 
 type TMovieDetail = {
@@ -134,6 +135,7 @@ type TMovieDetail = {
 	title: string;
 	video: boolean;
 	release_dates: ReleaseDates;
+	credits: TCastCrew;
 };
 
 export type ReleaseDates = {
@@ -171,6 +173,7 @@ export type TTVDetail = {
 	seasons: Season[];
 	type: string;
 	content_ratings: ContentRatings;
+	aggregate_credits: TCastCrew;
 };
 
 type BelongsToCollection = {
@@ -704,10 +707,13 @@ type watchProviderData = {
 	ZA: baseProvider;
 };
 
-type baseProvider = {
-	link: string;
-	ads: providerData[];
-	flatrate: providerData[];
+export type baseProvider = {
+	link?: string;
+	ads?: providerData[];
+	free?: providerData[];
+	buy?: providerData[];
+	rent?: providerData[];
+	flatrate?: providerData[];
 };
 
 export interface providerData {

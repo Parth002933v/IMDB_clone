@@ -30,7 +30,6 @@ export default [
 				route('/tv', './routes/profile/recommendation/TVRecommendation.tsx'),
 			]),
 		]),
-
 		layout('./routes/profile/favourite/Outlet.tsx', [
 			...prefix('favourite', [
 				// route('/', './routes/profile/recommendation/MovieFavourites.tsx'),

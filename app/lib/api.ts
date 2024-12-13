@@ -23,7 +23,6 @@ export const GetTrendingMedia = (
 	mediaType: 'movie' | 'tv' | 'all',
 	by: TrendingMovieGroupType
 ) => {
-
 	const params = new URLSearchParams();
 	params.set('sort_by', 'popularity.desc');
 	params.set('watch_region', 'IN');
@@ -88,7 +87,7 @@ export const GetMovieTVById = (id: string, mediaType: 'movie' | 'tv') => {
 	} else if (mediaType === 'tv') {
 		param.set(
 			'append_to_response',
-			`${['content_ratings', 'credits', 'watch/providers'].join(',')}`
+			`${['content_ratings', 'aggregate_credits', 'watch/providers'].join(',')}`
 		);
 	}
 

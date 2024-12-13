@@ -1,12 +1,20 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
-import { BaseMediaDetails, isMovieDetail, providerData, TProfile } from '~/tyoes';
+import {
+	BaseMediaDetails,
+	isMovieDetail,
+	providerData,
+	TBaseAction,
+	TBaseApiResponse,
+	TProfile,
+} from '~/tyoes';
 import RoundedProgressBar from '~/components/prgressbar';
 import { convertMinutes } from '~/lib/utils';
 import { FaBookmark, FaList, FaPlay } from 'react-icons/fa';
 import { MdFavorite } from 'react-icons/md';
 import { Popover } from 'flowbite-react';
 import { useOutletContext } from 'react-router';
+import useCustomFetcher from '~/hooks/useCustomFetcher';
 
 interface DetailBannerProps {
 	detailMediaData: BaseMediaDetails;
@@ -37,21 +45,58 @@ const DetailBanner = ({
 			icons: FaList,
 			lable: 'add to ist',
 			no_login_lable: 'Login to create and edit custom lists',
+			isActive: false,
 		},
 		{
 			id: 2,
 			icons: MdFavorite,
 			lable: 'Mark as Favorite',
 			no_login_lable: 'Login to add this movie to your favorite list',
+			isActive: media.isFavourite || false,
 		},
 		{
 			id: 3,
 			icons: FaBookmark,
 			lable: 'Add to your watchlist',
-
 			no_login_lable: 'Login to add this movie to your watchlist',
+			isActive: media.isWatchListed || false,
 		},
 	];
+
+	const {
+		fetcher: favouriteAndWatchlistMediaFetcher,
+		data: favouriteMediaData,
+		fetcherState: favouriteAndWatchlistMediaFetchState,
+	} = useCustomFetcher<TBaseApiResponse | undefined>(undefined);
+
+	const handleFavorite = () => {
+		const payload: TBaseAction = {
+			'x-type': 'favorite',
+			media_type: isMovie ? 'movie' : 'tv',
+			media_id: media.id,
+			// favorite : media.
+			favorite: !media.isFavourite,
+		};
+
+		favouriteAndWatchlistMediaFetcher.submit(payload, {
+			action: '/api/remote/action',
+			method: 'POST',
+		});
+	};
+
+	const handleWatchlist = () => {
+		const payload: TBaseAction = {
+			'x-type': 'watchlist',
+			media_type: isMovie ? 'movie' : 'tv',
+			media_id: media.id,
+			watchlist: !media.isWatchListed,
+		};
+
+		favouriteAndWatchlistMediaFetcher.submit(payload, {
+			action: '/api/remote/action',
+			method: 'POST',
+		});
+	};
 
 	return (
 		<div className={twMerge(`relative`)}>
@@ -287,14 +332,22 @@ const DetailBanner = ({
 								>
 									<div
 										onClick={() => {
-											console.log(m.lable);
+											if (
+												favouriteAndWatchlistMediaFetchState == 'idle'
+											) {
+												if (m.id == 2) {
+													handleFavorite();
+												} else if (m.id == 3) {
+													handleWatchlist();
+												}
+											}
 										}}
 										className={twMerge(
 											`flex h-12 w-12 cursor-default items-center justify-center rounded-full bg-[#032541]`,
 											outletData && 'cursor-pointer'
 										)}
 									>
-										{<m.icons />}
+										{<m.icons className={twMerge(m.isActive && "text-pink-500")} />}
 									</div>
 								</Popover>
 							))}
@@ -314,7 +367,7 @@ const DetailBanner = ({
 						</div>
 
 						<div>
-							<div className="font-medium italic text-gray-500">
+							<div className="font-medium italic text-gray-100">
 								{media.tagline}
 							</div>
 							<div className="text-xl font-semibold">Overview</div>

@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { TCastCrew, TWatchProvider } from '~/tyoes';
+import { baseProvider, providerData, TCastCrew, TWatchProvider } from '~/tyoes';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -98,3 +98,23 @@ export const convertFormDataToObject = <T>(
 	});
 	return result;
 };
+
+export function getMaxDisplayPriorityItem(data: baseProvider): providerData | null {
+	const allProviders: providerData[] = [
+		...(data.ads || []),
+		...(data.free || []),
+		...(data.buy || []),
+		...(data.flatrate || []),
+		...(data.rent || []),
+	];
+
+	if (allProviders.length === 0) {
+		return null;
+	}
+
+	const maxPriorityItem = allProviders.reduce((max, current) =>
+		current.display_priority > max.display_priority ? current : max
+	);
+
+	return maxPriorityItem;
+}

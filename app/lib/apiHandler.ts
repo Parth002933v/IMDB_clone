@@ -6,6 +6,7 @@ import {
 	TSessionErrorSchema,
 } from '~/tyoes';
 
+
 export const axios = ax.create({
 	timeout: 3000,
 	// withCredentials: true,
@@ -81,13 +82,10 @@ const handleApiError = (
 			status_message: `Unexpected error with status: ${error.message}`,
 		});
 	} else if (error.request) {
-		return Promise.reject({
-			status_message:
-				'No response received from the server. Please check your network.',
-		});
+		console.warn('Network error detected. Retrying...');
+		return Promise.reject(error);
 	} else {
-		return Promise.reject<TBaseApiResponse>({
-			status_message: `Request error: ${error.message}`,
-		});
+		// Preserve original Axios error for non-network errors
+		return Promise.reject(error);
 	}
 };

@@ -1,22 +1,33 @@
 import React from 'react';
 import { Route } from '../../../.react-router/types/app/routes/detail/+types/detail_movie';
-import { GetMovieTVById } from '~/lib/api';
-import { filterCrewByJobs } from '~/lib/utils';
+import {
+	GetFavoritesMedia,
+	GetMovieTVById,
+	GetUserDetails,
+	GetWatchlistMedia,
+} from '~/lib/api';
+import { filterCrewByJobs, getMaxDisplayPriorityItem } from '~/lib/utils';
 import { data } from 'react-router';
 import DetailBanner from '~/components/movie_tv_detail/detailBanner';
 import CastCrew from '~/components/movie_tv_detail/CastCrews';
 import WatchProvider from '~/components/movie_tv_detail/watchProvider';
+import { isMovieDetail } from '~/tyoes';
+import { getCookieSessionFromHeader } from '~/lib/sessionStorage';
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
 	// console.log('mediaDeatl', params);
 	// if (!(params.mediaType === 'tv' || params.mediaType === 'movie')) {
 	// 	throw data('not page found', { status: 404 });
 	// }
 
+	const cookieSession = await getCookieSessionFromHeader(request);
+	const profileDetail = await GetUserDetails(cookieSession);
+
 	const MovieId = params.id.split('-')[0];
 
 	const movieDetail = await GetMovieTVById(MovieId, 'movie');
-
+	const m = movieDetail.data;
+	const isMovie = isMovieDetail(m);
 	// const movie = movieDetail.data;
 	// const isMovie = isMovieDetail(movie);
 	// if(isMovie == true){
@@ -26,9 +37,55 @@ export async function loader({ params }: Route.LoaderArgs) {
 	// const CastCrew = await GetCastCrewByMovieId(MovieId, 'movie');
 
 	// const pagginatedCast = CastCrew.data.cast.slice(0, 10);
-	const pagginatedCast = movieDetail.data.credits.cast.slice(0, 10);
-	const importantCrews = filterCrewByJobs(movieDetail.data.credits.crew);
+	const pagginatedCast = isMovie
+		? m.credits.cast.slice(0, 10)
+		: m.aggregate_credits.cast.slice(0, 10);
+	const importantCrews = filterCrewByJobs(
+		isMovie ? m.credits.crew : m.aggregate_credits.crew
+	);
 
+	if (profileDetail.data) {
+		const usersFavouriteMovie = await GetFavoritesMedia(
+			cookieSession,
+			'movies',
+			profileDetail.data.id
+		);
+
+		const userWatchlistMovies = await GetWatchlistMedia(
+			cookieSession,
+			'movies',
+			profileDetail.data.id
+		);
+
+		if (
+			usersFavouriteMovie.data === undefined ||
+			userWatchlistMovies.data === undefined
+		) {
+
+			return data({
+				movieDetail: movieDetail.data,
+				paginatedCast: pagginatedCast,
+				importantCrews: importantCrews,
+				watchProvider: movieDetail.data['watch/providers'],
+				colorPalette: '',
+			});
+
+		}
+
+		usersFavouriteMovie.data.results.forEach(fav => {
+			// const match = m.results.find(rco => rco.id === fav.id);
+			const match = m.id === fav.id;
+			if (match) {
+				m.isFavourite = true;
+			}
+		});
+		userWatchlistMovies.data.results.forEach(wal => {
+			const match = m.id === wal.id;
+			if (match) {
+				m.isWatchListed = true;
+			}
+		});
+	}
 	// const watchProvider = await GetWatchProvider('movie', MovieId);
 	// const fullImage = `https://media.themoviedb.org/t/p/w300_and_h450_bestv2${movieDetail.data.backdrop_path}`;
 
@@ -63,19 +120,18 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 const MovieDetail = ({ loaderData }: Route.ComponentProps) => {
-	const {
-		movieDetail,
-		watchProvider,
-		importantCrews,
-		paginatedCast,
-		colorPalette,
-	} = loaderData;
+	const { movieDetail, watchProvider, importantCrews, paginatedCast } = loaderData;
+	// console.log(loaderData.watchProvider.results.IN);
+	const item = getMaxDisplayPriorityItem(
+		watchProvider.results.IN || watchProvider.results.US!
+	);
+
 	return (
 		<div className="h-full w-full">
 			<DetailBanner
 				detailMediaData={movieDetail}
 				importantCrews={importantCrews}
-				provider={watchProvider.results.IN?.flatrate[0]}
+				provider={item == null ? undefined : item}
 			/>
 
 			<CastCrew paginatedCast={paginatedCast} />
@@ -84,7 +140,7 @@ const MovieDetail = ({ loaderData }: Route.ComponentProps) => {
 			watchProvider.results.IN == undefined ? (
 				<></>
 			) : (
-				<WatchProvider provider={watchProvider.results.IN.flatrate[0]} />
+				<WatchProvider provider={item == null ? undefined : item} />
 			)}
 		</div>
 	);

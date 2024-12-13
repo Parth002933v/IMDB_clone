@@ -7,7 +7,6 @@ import { data } from 'react-router';
 import { Route } from '../../../../.react-router/types/app/routes/remote/api/+types/action';
 
 export async function action({ request, params, context }: Route.ActionArgs) {
-	console.log('in action');
 	// const formData = new URLSearchParams(await request.text());
 
 	const cookieSession = await getCookieSessionFromHeader(request);
