@@ -13,7 +13,7 @@ import { convertMinutes } from '~/lib/utils';
 import { FaBookmark, FaList, FaPlay } from 'react-icons/fa';
 import { MdFavorite } from 'react-icons/md';
 import { Popover } from 'flowbite-react';
-import { useOutletContext } from 'react-router';
+import { useNavigate, useOutletContext } from 'react-router';
 import useCustomFetcher from '~/hooks/useCustomFetcher';
 
 interface DetailBannerProps {
@@ -27,8 +27,8 @@ const DetailBanner = ({
 	importantCrews,
 	provider,
 }: DetailBannerProps) => {
-	const outletData: TProfile | undefined = useOutletContext();
-	console.log(outletData?.id);
+	const user: TProfile | undefined = useOutletContext();
+	const navigate = useNavigate();
 	// console.log(provider);
 	const isMovie = isMovieDetail(media);
 
@@ -325,7 +325,7 @@ const DetailBanner = ({
 												`bg-[#032541] px-2 py-2 text-xs`
 											)}
 										>
-											{outletData ? m.lable : m.no_login_lable}
+											{user ? m.lable : m.no_login_lable}
 										</div>
 									}
 									trigger={'hover'}
@@ -333,21 +333,31 @@ const DetailBanner = ({
 									<div
 										onClick={() => {
 											if (
-												favouriteAndWatchlistMediaFetchState == 'idle'
+												favouriteAndWatchlistMediaFetchState == 'idle' &&
+												user
 											) {
 												if (m.id == 2) {
 													handleFavorite();
 												} else if (m.id == 3) {
 													handleWatchlist();
 												}
+											} else if (!user) {
+												navigate('/login', { viewTransition: true });
 											}
 										}}
 										className={twMerge(
 											`flex h-12 w-12 cursor-default items-center justify-center rounded-full bg-[#032541]`,
-											outletData && 'cursor-pointer'
+											user && 'cursor-pointer'
 										)}
 									>
-										{<m.icons className={twMerge(m.isActive && "text-pink-500")} />}
+										{
+											<m.icons
+												className={twMerge(
+													m.isActive && 'text-pink-500',
+													'cursor-pointer'
+												)}
+											/>
+										}
 									</div>
 								</Popover>
 							))}

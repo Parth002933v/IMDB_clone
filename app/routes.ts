@@ -39,7 +39,6 @@ export default [
 			]),
 		]),
 
-
 		layout('./routes/profile/favourite/Outlet.tsx', [
 			...prefix('favourite', [
 				index('./routes/profile/favourite/index.tsx'),
@@ -47,8 +46,6 @@ export default [
 				route('/tv', './routes/profile/favourite/TVFavourites.tsx'),
 			]),
 		]),
-
-
 	]),
 
 	route('movie/:id', './routes/detail/detail_movie.tsx'),
