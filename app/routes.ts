@@ -12,6 +12,7 @@ export default [
 	...prefix('api/remote', [
 		route('panel', './routes/remote/api/trendingMovies.tsx'),
 		route('action', './routes/remote/api/action.tsx'),
+		route('load-items', './routes/remote/api/itemLoader.tsx'),
 	]),
 
 	route('login', './routes/auth/login.tsx'),
@@ -58,5 +59,6 @@ export default [
 		route('person', './routes/search/search_people.tsx'),
 	]),
 ] satisfies RouteConfig;
+
 // Disclaimer
 // This website is a clone created for educational purposes only. It is not intended for actual use, and while you may choose to interact with it, we do not recommend using it for any critical or real-world applications. Any similarity to the TMDB website is purely for learning purposes. Use at your own discretion.

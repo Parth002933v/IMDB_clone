@@ -14,7 +14,7 @@ const Disclaimer = () => {
 		<div className="w-full px-5 py-1">
 			<div
 				className={twMerge(
-					`justify-betweent flex h-fit w-full flex-row rounded-lg bg-yellow-100 px-5 py-5 text-yellow-800 transition-all duration-300`,
+					`justify-betweent flex h-fit w-full flex-row rounded-lg bg-yellow-100 px-5 py-5 text-yellow-800 transition-all duration-300`
 				)}
 				onClick={() => {
 					console.log('toggle');

@@ -8,12 +8,13 @@ const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
 
 	const isRootProfileAndRecomendation =
 		currentPath == `/u/${params.username}/` ||
+		currentPath == `/u/${params.username}/recommendations` ||
 		currentPath == `/u/${params.username}/recommendations/movie`;
 
 	return (
 		<div className="flex h-full w-full flex-col gap-3 py-5">
 			<div className="flex w-full justify-between px-5">
-				<div className="font-bold ">My Recommendations</div>
+				<div className="font-bold">My Recommendations</div>
 
 				<div className="flex gap-3 font-light">
 					<NavLink to={'./recommendations/movie'}>
@@ -47,7 +48,7 @@ const ProfileOutlet = ({ matches, params }: Route.ComponentProps) => {
 				</div>
 			</div>
 
-			<Outlet  />
+			<Outlet />
 		</div>
 	);
 };

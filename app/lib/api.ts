@@ -170,7 +170,10 @@ export const GetWatchProvider = (mediaType: 'tv' | 'movie', mediaID: string) => 
 	return axios.get<TWatchProvider>(baseUrl);
 };
 
-export const GetRecommendedMedia = async (mediaType: 'movie' | 'tv') => {
+export const GetRecommendedMedia = async (
+	mediaType: 'movie' | 'tv',
+	page: number = 1
+) => {
 	let trendingMovie: AxiosResponse<TTrendingMovieTV, any>;
 
 	if (mediaType === 'tv') {
@@ -184,6 +187,7 @@ export const GetRecommendedMedia = async (mediaType: 'movie' | 'tv') => {
 	const params = new URLSearchParams();
 	params.set('sort_by', 'popularity.desc');
 	params.set('watch_region', 'IN');
+	params.set('page', page.toString());
 
 	return axios.get<TMovieTV>(`${baseUrl}?${params}`);
 };

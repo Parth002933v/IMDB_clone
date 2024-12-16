@@ -1,6 +1,13 @@
-import { clsx, type ClassValue } from 'clsx';
+import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { baseProvider, providerData, TCastCrew, TWatchProvider } from '~/tyoes';
+import {
+	baseProvider,
+	providerData,
+	TCastCrew,
+	TMovieTV,
+	TWatchProvider,
+} from '~/tyoes';
+import { GetFavoritesMedia, GetWatchlistMedia } from '~/lib/api';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -112,9 +119,47 @@ export function getMaxDisplayPriorityItem(data: baseProvider): providerData | nu
 		return null;
 	}
 
-	const maxPriorityItem = allProviders.reduce((max, current) =>
+	return allProviders.reduce((max, current) =>
 		current.display_priority > max.display_priority ? current : max
 	);
-
-	return maxPriorityItem;
 }
+
+export const addToFavouriteAndWatchlistFieldValue = async (
+	mediaData: TMovieTV,
+	cookieSession: string,
+	userID: number,
+	mediaType: 'movies' | 'tv'
+) => {
+	const usersFavouriteMovie = await GetFavoritesMedia(
+		cookieSession,
+		mediaType,
+		userID
+	);
+
+	const userWatchlistMovies = await GetWatchlistMedia(
+		cookieSession,
+		mediaType,
+		userID
+	);
+	if (
+		usersFavouriteMovie.data === undefined ||
+		userWatchlistMovies.data === undefined
+	) {
+		return;
+	}
+
+	usersFavouriteMovie.data.results.forEach(fav => {
+		const match = mediaData.results.find(rco => rco.id === fav.id);
+		if (match) {
+			match.isFavourite = true;
+		}
+	});
+	userWatchlistMovies.data.results.forEach(wal => {
+		const match = mediaData.results.find(rco => rco.id === wal.id);
+		if (match) {
+			match.isWatchListed = true;
+		}
+	});
+
+	// return mediaData;
+};
