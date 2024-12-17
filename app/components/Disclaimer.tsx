@@ -17,7 +17,6 @@ const Disclaimer = () => {
 					`justify-betweent flex h-fit w-full flex-row rounded-lg bg-yellow-100 px-5 py-5 text-yellow-800 transition-all duration-300`
 				)}
 				onClick={() => {
-					console.log('toggle');
 					toggleIsOpen();
 				}}
 			>
@@ -27,7 +26,7 @@ const Disclaimer = () => {
 						Disclaimer :
 					</strong>
 
-					<p className={twMerge('line-clamp-1 pl-2', isOpen && 'line-clamp-2')}>
+					<p className={twMerge('line-clamp-1 pl-2', isOpen && 'line-clamp-none')}>
 						{dis}
 					</p>
 				</div>

@@ -5,7 +5,7 @@ import MoviesScrollList from '~/components/home/moviesScrollList';
 import Banner from '~/components/home/banner';
 import Trailers from '~/components/home/Trailers';
 import { GetFreeShow, GetPopularMovies, GetTrendingMedia } from '~/lib/api';
-import { isMovieData, TMovieTV, TTrendingMovieTV } from '~/tyoes';
+import { isMovieData, TBaseApiResponseSchema, TMovieTV, TTrendingMovieTV } from '~/tyoes';
 import useCustomFetcher from '~/hooks/useCustomFetcher';
 import { getRandomInt } from '~/lib/utils';
 
@@ -17,13 +17,46 @@ export const meta: MetaFunction = () => {
 };
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	if (isRouteErrorResponse(error)) {
+	const APIError = TBaseApiResponseSchema.safeParse(error || '');
+	if (APIError.success) {
+		return (
+			<div className="flex min-h-screen items-center justify-center bg-gray-100 p-6">
+				<div className="w-full max-w-lg rounded-lg bg-white p-8 shadow-lg">
+					<h1 className="mb-4 text-4xl font-bold text-red-600">
+						Error {APIError.data.status_code}
+					</h1>
+					<h2 className="mb-4 text-xl text-gray-700">
+						{APIError.data.status_message}
+					</h2>
+					{/*<p className="mb-6 text-lg text-gray-600">{APIError.data.}</p>*/}
+
+					<div className="flex justify-center">
+						<button
+							onClick={() => window.location.reload()}
+							className="rounded-lg bg-blue-500 px-6 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+						>
+							Retry
+						</button>
+					</div>
+				</div>
+			</div>
+		);
+	} else if (isRouteErrorResponse(error)) {
 		return (
 			<>
 				<h1>
 					{error.status} {error.statusText}
 				</h1>
 				<p>{error.data}</p>
+
+				<div className="flex justify-center">
+					<button
+						onClick={() => window.location.reload()}
+						className="rounded-lg bg-blue-500 px-6 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+					>
+						Retry
+					</button>
+				</div>
 			</>
 		);
 	} else if (error instanceof Error) {
@@ -33,10 +66,18 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 				<p>{error.message}</p>
 				<p>The stack trace is:</p>
 				<pre>{error.stack}</pre>
+				<div className="flex justify-center">
+					<button
+						onClick={() => window.location.reload()}
+						className="rounded-lg bg-blue-500 px-6 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+					>
+						Retry
+					</button>
+				</div>
 			</div>
 		);
 	} else {
-		return <h1>Unknown Error</h1>;
+		return <h1>"unknown"</h1>;
 	}
 }
 

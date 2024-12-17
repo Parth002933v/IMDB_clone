@@ -121,7 +121,7 @@ const DetailBanner = ({
 						/>
 						{/*<div className="w-[calc(((100vw/2.222222) - 40px)/1.5)] min-w-[calc(((100vw/2.222222) - 40px)/1.5)] h-[calc((100vw/2.222222) - 40px)] min-h-[calc((100vw/2.222222) - 40px)] absolute left-5 top-4 z-[4] overflow-hidden">*/}
 
-						<div className="absolute bottom-0 left-5 top-0 z-[4] my-auto h-[80%] overflow-hidden">
+						<div className="absolute bottom-0 left-5 top-0  my-auto h-[80%] overflow-hidden">
 							<img
 								className="hidden h-full min-h-full w-full min-w-full rounded-md max-md:block"
 								src={`https://media.themoviedb.org/t/p/w300_and_h450_face/${media.poster_path}`}

@@ -158,6 +158,15 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 					{error.status} {error.statusText}
 				</h1>
 				<p>{error.data}</p>
+
+				<div className="flex justify-center">
+					<button
+						onClick={() => window.location.reload()}
+						className="rounded-lg bg-blue-500 px-6 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+					>
+						Retry
+					</button>
+				</div>
 			</>
 		);
 	} else if (error instanceof Error) {
@@ -167,12 +176,18 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 				<p>{error.message}</p>
 				<p>The stack trace is:</p>
 				<pre>{error.stack}</pre>
+					<div className="flex justify-center">
+					<button
+						onClick={() => window.location.reload()}
+						className="rounded-lg bg-blue-500 px-6 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+					>
+						Retry
+					</button>
+				</div>
 			</div>
 		);
 	} else {
 		return <h1>"unknown"</h1>;
 	}
-	// } else if(TApiErrorSchema) {
-	// 	return <h1>{error.status_message}</h1>;
 	// }
 }

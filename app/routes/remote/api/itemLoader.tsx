@@ -9,7 +9,6 @@ import {
 import { addToFavouriteAndWatchlistFieldValue } from '~/lib/utils';
 
 export async function loader({ request }: Route.LoaderArgs) {
-	console.log('laoder in item laoder');
 
 	const cookieSession = await getCookieSessionFromHeader(request);
 	const user = await getUserFromRequest(request);
@@ -44,7 +43,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 				return res.data;
 			}
 		}
-		
+
 	}
 }
 

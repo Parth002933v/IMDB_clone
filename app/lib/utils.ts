@@ -106,13 +106,16 @@ export const convertFormDataToObject = <T>(
 	return result;
 };
 
-export function getMaxDisplayPriorityItem(data: baseProvider): providerData | null {
+export function getMaxDisplayPriorityItem(data?: baseProvider): providerData | null {
+	if (!data) {
+		return null;
+	}
 	const allProviders: providerData[] = [
-		...(data.ads || []),
 		...(data.free || []),
 		...(data.buy || []),
 		...(data.flatrate || []),
 		...(data.rent || []),
+		...(data.ads || []),
 	];
 
 	if (allProviders.length === 0) {
