@@ -1,25 +1,25 @@
-import { createRequestHandler } from "@react-router/express";
-import express from "express";
-import "react-router";
+import type { Config, Context } from "@netlify/functions";
+import { createRequestHandler } from "react-router";
 
 declare module "react-router" {
-  export interface AppLoadContext {
-    VALUE_FROM_VERCEL: string;
+  interface AppLoadContext {
+    VALUE_FROM_NETLIFY: string;
   }
 }
 
-const app = express();
-
-app.use(
-  createRequestHandler({
-    // @ts-expect-error - virtual module provided by React Router at build time
-    build: () => import("virtual:react-router/server-build"),
-    getLoadContext() {
-      return {
-        VALUE_FROM_VERCEL: "Hello from Vercel",
-      };
-    },
-  })
+const requestHandler = createRequestHandler(
+  // @ts-expect-error - virtual module provided by React Router at build time
+  () => import("virtual:react-router/server-build"),
+  import.meta.env.MODE
 );
 
-export default app;
+export default async (request: Request, context: Context) => {
+  return requestHandler(request, {
+    VALUE_FROM_NETLIFY: "Hello from Netlify",
+  });
+};
+
+export const config: Config = {
+  path: "/*",
+  preferStatic: true,
+};
