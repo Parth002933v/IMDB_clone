@@ -1,0 +1,1 @@
+import{r as m,j as c}from"./chunk-K6AXKMTT-ChX_KrkW.js";import{t as g}from"./bundle-mjs-D696Ktp4.js";const i=({alt:r,src:e,defaultImage:t,className:o})=>{const[s,a]=m.useState(e),l=()=>{a(t||"")};return c.jsx("img",{onError:l,defaultValue:"/images/defaultProfile.svg",alt:r,src:s,className:g("h-full w-full rounded-lg object-fill object-top",o)})};export{i as F};

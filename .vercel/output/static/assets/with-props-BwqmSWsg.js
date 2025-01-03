@@ -1,0 +1,1 @@
+import{b as t,d as e,e as o,f as p,r as s,g as u}from"./chunk-K6AXKMTT-ChX_KrkW.js";function i(a){return function(){const r={params:t(),loaderData:e(),actionData:o(),matches:p()};return s.createElement(a,r)}}function m(a){return function(){const r={params:t(),loaderData:e(),actionData:o(),error:u()};return s.createElement(a,r)}}export{m as a,i as w};
