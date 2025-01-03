@@ -48,6 +48,10 @@ const NavBar = ({ profileData }: NavBarProps) => {
 							className={'h-max w-max'}
 						/>
 					</Link>
+					<div>
+						{VERCEL_BASE_URL}/logo.png
+
+					</div>
 					<div
 						className={`top-16 h-full transform bg-[#032541] backdrop-blur-lg transition-transform duration-300 max-md:fixed max-md:left-0 max-md:w-[85%] ${isOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full'} `}
 					>

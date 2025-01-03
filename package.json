@@ -10,9 +10,9 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
-    "@react-router/express": "*",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-dropdown-menu": "^2.1.4",
+    "@react-router/express": "*",
     "@react-router/fs-routes": "^7.1.1",
     "@react-router/node": "^7.1.1",
     "@react-router/serve": "^7.1.1",
@@ -36,10 +36,10 @@
     "sharp": "^0.33.5",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "tmdb": "link:",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
     "@react-router/dev": "^7.1.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/express": "^5.0.0",
@@ -48,6 +48,7 @@
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9",

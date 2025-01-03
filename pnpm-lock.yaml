@@ -86,6 +86,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@22.10.5)(typescript@5.7.2)))
+      tmdb:
+        specifier: 'link:'
+        version: 'link:'
       zod:
         specifier: ^3.24.1
         version: 3.24.1
