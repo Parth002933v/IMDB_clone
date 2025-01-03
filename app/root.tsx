@@ -75,7 +75,8 @@ export default function App({ loaderData, matches }: Route.ComponentProps) {
 
 					{/*//======*/}
 
-					
+					<Disclaimer />
+
 					{/**/}
 
 					<p className="w-full bg-red-700"></p>
