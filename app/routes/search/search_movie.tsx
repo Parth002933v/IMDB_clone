@@ -5,6 +5,7 @@ import { TMovieSearch, TPersonSearch, TTVShowsSearch } from '~/tyoes';
 import { formatDate } from '~/lib/utils';
 import FallbackImage from '~/components/fallbackImage';
 import PaginatedComponent from '~/components/PaginatedNavBar';
+import { VERCEL_BASE_URL } from '~/lib/constant';
 
 const searchMovieOutlet = ({ params }: Route.ComponentProps) => {
 	const outlet: {
@@ -33,9 +34,9 @@ export function MovieSearchComponent({ outlet }: { outlet: TMovieSearch }) {
 							src={
 								e.poster_path
 									? `https://media.themoviedb.org/t/p/w130_and_h195_bestv2${e.poster_path}`
-									: '/images/defaultBGImage.svg'
+									: `${VERCEL_BASE_URL}/images/defaultBGImage.svg`
 							}
-							defaultImage="/images/defaultBGImage.svg"
+							defaultImage={`${VERCEL_BASE_URL}/images/defaultBGImage.svg`}
 						/>
 					</Link>
 

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "react-router build && node vercel/prepare.js",
+    "dev2": "react-router dev",
     "dev": "cross-env NODE_ENV=development node ./dev-server.js",
     "typecheck": "react-router typegen && tsc"
   },

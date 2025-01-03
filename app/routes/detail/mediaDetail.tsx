@@ -10,6 +10,7 @@ import { isMovieDetail } from '~/tyoes';
 import FallbackImage from '~/components/fallbackImage';
 import DetailBanner from '~/components/movie_tv_detail/detailBanner';
 import CastCrew from '~/components/movie_tv_detail/CastCrews';
+import { VERCEL_BASE_URL } from '~/lib/constant';
 
 // import { Swatch } from '@vibrant/color';
 
@@ -292,7 +293,7 @@ const MediaDetail = ({ loaderData }: Route.ComponentProps) => {
 									src={
 										d.profile_path
 											? `https://media.themoviedb.org/t/p/w120_and_h133_face${d.profile_path}`
-											: '/images/defaultProfile.svg'
+											: `${VERCEL_BASE_URL}/images/defaultProfile.svg`
 									}
 								/>
 							</div>

@@ -3,6 +3,7 @@ import { TMovieSearch, TPersonSearch, TTVShowsSearch } from '~/tyoes';
 import { useOutletContext } from 'react-router';
 import FallbackImage from '~/components/fallbackImage';
 import PaginatedComponent from '~/components/PaginatedNavBar';
+import { VERCEL_BASE_URL } from '~/lib/constant';
 
 const PeopleOutlet = () => {
 	const outlet: {
@@ -30,9 +31,9 @@ export function PeopleSearchComponent({ outlet }: { outlet: TPersonSearch }) {
 							src={
 								e.profile_path
 									? `https://media.themoviedb.org/t/p/w130_and_h195_bestv2${e.profile_path}`
-									: '/images/defaultProfile.svg'
+									: `${VERCEL_BASE_URL}/images/defaultProfile.svg`
 							}
-							defaultImage="/images/defaultProfile.svg"
+							defaultImage={`${VERCEL_BASE_URL}/images/defaultProfile.svg`}
 						/>
 					</div>
 

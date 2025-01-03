@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { VERCEL_BASE_URL } from '~/lib/constant';
 
 const FallbackImage = ({
 	alt,
@@ -20,7 +21,7 @@ const FallbackImage = ({
 	return (
 		<img
 			onError={handleImageError}
-			defaultValue="/images/defaultProfile.svg"
+			defaultValue={`${VERCEL_BASE_URL}/images/defaultProfile.svg`}
 			alt={alt}
 			src={imgSrc}
 			className={twMerge(`h-full w-full rounded-lg object-fill object-top`,className)}

@@ -12,6 +12,7 @@ import {
 } from '~/components/ui/dropdown-menu';
 import { getCookieSessionFromHeader } from '~/lib/sessionStorage';
 import { TProfile } from '~/tyoes';
+import { VERCEL_BASE_URL } from '~/lib/constant';
 
 export async function loader({
 	request,
@@ -155,7 +156,7 @@ const Profile = ({ loaderData, params }: Route.ComponentProps) => {
 						<img
 							className={'object-scale-down'}
 							alt="profile image placeholder"
-							src={`/images/defaultProfile.svg`}
+							src={`${VERCEL_BASE_URL}/images/defaultProfile.svg`}
 						/>
 					</div>
 

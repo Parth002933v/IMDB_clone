@@ -7,6 +7,7 @@ import useToggle from '~/hooks/useToogle';
 import { TProfile } from '~/tyoes';
 import { Popover } from 'flowbite-react';
 import { twMerge } from 'tailwind-merge';
+import { VERCEL_BASE_URL } from '~/lib/constant';
 
 interface NavBarProps {
 	profileData?: TProfile;
@@ -43,7 +44,7 @@ const NavBar = ({ profileData }: NavBarProps) => {
 					<Link to="/" className="h-[20px] w-[154px] max-md:hidden">
 						<img
 							alt="desktop logo"
-							src="/logo.png"
+							src={`${VERCEL_BASE_URL}/logo.png`}
 							className={'h-max w-max'}
 						/>
 					</Link>
@@ -74,7 +75,7 @@ const NavBar = ({ profileData }: NavBarProps) => {
 					<Link to="/">
 						<img
 							alt={'mobile logo'}
-							src="/logo2.png"
+							src={`${VERCEL_BASE_URL}/logo2.png`}
 							className={'h-14 w-14 object-contain'}
 						/>
 					</Link>
@@ -96,10 +97,7 @@ const NavBar = ({ profileData }: NavBarProps) => {
 								<FaBell size={17} color={'white'} />
 							</button>
 
-							<ProfileComponent
-
-
-								profileData={profileData} />
+							<ProfileComponent profileData={profileData} />
 						</>
 					) : (
 						<>
@@ -132,7 +130,6 @@ const NavBar = ({ profileData }: NavBarProps) => {
 					</button>
 				</div>
 			</div>
-
 		</div>
 	);
 };
@@ -197,7 +194,10 @@ const ProfileComponent = ({ profileData }: ProfileComponentProps) => {
 			<OptionButton link={'#'} lable={'Discussions'} />
 			<OptionButton link={'#'} lable={'Lists'} />
 			<OptionButton link={'#'} lable={'Ratings'} />
-			<OptionButton link={`./u/${profileData?.username}/watchlist`} lable={'Watchlists'} />
+			<OptionButton
+				link={`./u/${profileData?.username}/watchlist`}
+				lable={'Watchlists'}
+			/>
 
 			<hr className="h-0.5 w-full bg-gray-400" />
 
@@ -213,31 +213,34 @@ const ProfileComponent = ({ profileData }: ProfileComponentProps) => {
 	return (
 		<>
 			<Popover
-
-
 				content={profileData ? loginContent : logoutContent}
 				trigger="click"
 			>
 				<button
 					className={twMerge(
-						`relative flex h-9 w-9 place-content-center items-center justify-center overflow-hidden rounded-full text-xs font-semibold text-white`
-						,!profileData &&'md:hidden'
+						`relative flex h-9 w-9 place-content-center items-center justify-center overflow-hidden rounded-full text-xs font-semibold text-white`,
+						!profileData && 'md:hidden'
 					)}
 				>
-					<div key="not-login" className={twMerge('w-full h-full  bg-black',profileData ? 'hidden':'block md:hidden ')}>
+					<div
+						key="not-login"
+						className={twMerge(
+							'h-full w-full bg-black',
+							profileData ? 'hidden' : 'block md:hidden'
+						)}
+					>
 						<img
 							className={'object-scale-down'}
 							alt="profile image placeholder"
-							src={`/images/defaultProfile.svg`}
+							src={`${VERCEL_BASE_URL}/images/defaultProfile.svg`}
 						/>
 					</div>
 
 					<div
 						key="loged-in"
 						className={twMerge(
-							`flex place-content-center
-							 h-full w-full items-center justify-center bg-purple-700 text-center`,
-							profileData ? 'block':'hidden'
+							`flex h-full w-full place-content-center items-center justify-center bg-purple-700 text-center`,
+							profileData ? 'block' : 'hidden'
 						)}
 					>
 						{profileData?.username[0].toUpperCase()}

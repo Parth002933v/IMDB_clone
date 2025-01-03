@@ -2,6 +2,7 @@ import React from 'react';
 import { isMovieDetail, isTVCast, TCastCrew } from '~/tyoes';
 import FallbackImage from '~/components/fallbackImage';
 import { FaArrowRightLong } from 'react-icons/fa6';
+import { VERCEL_BASE_URL } from '~/lib/constant';
 
 interface CastCrewProps {
 	paginatedCast: TCastCrew['cast'];
@@ -26,7 +27,7 @@ const CastCrew = ({ paginatedCast }: CastCrewProps) => {
 									src={
 										d.profile_path
 											? `https://media.themoviedb.org/t/p/w240_and_h266_face${d.profile_path}`
-											: '/images/defaultProfile.svg'
+											: `${VERCEL_BASE_URL}/images/defaultProfile.svg`
 									}
 								/>
 							</div>
