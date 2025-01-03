@@ -24,6 +24,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	console.log('login laodre', cookieSession.get('session_id'), 'login loader');
 	if (cookieSession.get('session_id')) {
 		return redirect(`/`, {
+
 			headers: {
 				'Cache-Control': 'no-store',
 			},
