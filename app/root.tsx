@@ -50,53 +50,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	);
 }
 
-// export default function App() {
-// 	return <Outlet />;
-// }
-// export async function loader({request}:Route.LoaderArgs){
-//
-//
-//
-// }
-
-
 export async function loader({ request }: Route.LoaderArgs) {
-	// console.log('in root loader');
 	const cookieSession = await getCookieSessionFromHeader(request);
 
-	// console.log('in root loader=>', cookieSession);
-	// const id = axios.interceptors.request.use(async config => {
-	// 	const url = new URL(config.url || '');
-	// 	url.searchParams.append('session_id', cookieSession.get('session_id'));
-	// 	config.url = url.toString();
-	// 	return config;
-	// });
-	// console.log(
-	// 	'loader in navbar',
-	// 	cookieSession.get('session_id'),
-	// 	'====loader in navbar'
-	// );
-
 	const profileDetail = await GetUserDetails(cookieSession);
-	// console.log('profileDetail in root loader', profileDetail.data);
-	// console.log('profileDetail', profileDetail, 'profileDetail');
-
-	//
-	// const unAuthorizedRequestError = TApiErrorSchema.safeParse(profileDetail.data);
-	// if (unAuthorizedRequestError.success) {
-	// 	console.log(
-	// 		'profileDetail',
-	// 		unAuthorizedRequestError.data.status_message,
-	// 		'profileDetail'
-	// 	);
-	// 	return undefined;
-	// }
 
 	if (!profileDetail || !profileDetail.data) {
 		return undefined;
 	}
 
-	// axios.interceptors.request.eject(id);
 	return profileDetail.data;
 }
 
@@ -177,7 +139,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 				<p>{error.message}</p>
 				<p>The stack trace is:</p>
 				<pre>{error.stack}</pre>
-					<div className="flex justify-center">
+				<div className="flex justify-center">
 					<button
 						onClick={() => window.location.reload()}
 						className="rounded-lg bg-blue-500 px-6 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"

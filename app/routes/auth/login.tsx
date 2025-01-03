@@ -1,18 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
 	data,
-	Form,
 	redirect,
-	redirectDocument,
 	UNSAFE_DataWithResponseInit,
 	useFetcher,
-	useRevalidator,
 } from 'react-router';
 import { Route } from '../../../.react-router/types/app/routes/auth/+types/login';
 import { createRequestToken, CreateSessionId, login } from '~/lib/api';
 import {
 	cookieSessionStorage,
-	getCookieSessionFromHeader, getCookieSessionFromHeader2,
+	getCookieSessionFromHeader2,
 } from '~/lib/sessionStorage';
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -24,7 +21,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 	console.log('login laodre', cookieSession.get('session_id'), 'login loader');
 	if (cookieSession.get('session_id')) {
 		return redirect(`/`, {
-
 			headers: {
 				'Cache-Control': 'no-store',
 			},
@@ -73,7 +69,7 @@ export async function action({
 	return redirect('/', {
 		headers: {
 			'Cache-Control': 'no-store',
-			'X-Remix-Revalidate':"true",
+			'X-Remix-Revalidate': 'true',
 			'Set-Cookie': sesstionHearder,
 		},
 	});
