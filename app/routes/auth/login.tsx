@@ -18,7 +18,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	);
 	// console.log(cookieSession);
 
-	console.log('login laodre', cookieSession.get('session_id'), 'login loader');
+	// console.log('login laodre', cookieSession.get('session_id'), 'login loader');
 	if (cookieSession.get('session_id')) {
 		return redirect(`/`, {
 			headers: {
@@ -41,7 +41,7 @@ export async function action({
 		return data('username and password are required', { status: 400 });
 	}
 
-	console.log(username.toString(), password.toString());
+	// console.log(username.toString(), password.toString());
 
 	const requestToken = await createRequestToken();
 	// console.log(requestToken.data.request_token);
@@ -59,7 +59,7 @@ export async function action({
 	// await cookieSessionStorage.commitSession(session)
 
 	const sesstionHearder = await cookieSessionStorage.commitSession(session);
-	console.log('sesstrion header', sesstionHearder, 'sesston header');
+	// console.log('sesstrion header', sesstionHearder, 'sesston header');
 	// return data('done!', {
 	// 	headers: {
 	// 		'Cache-Control': 'no-store',

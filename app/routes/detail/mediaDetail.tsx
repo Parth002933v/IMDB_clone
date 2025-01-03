@@ -38,7 +38,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 }
 
 export async function loader({ params }: Route.LoaderArgs) {
-	console.log('mediaDeatl', params);
+	// console.log('mediaDeatl', params);
 	if (!(params.mediaType === 'tv' || params.mediaType === 'movie')) {
 		throw data('not page found', { status: 404 });
 	}
