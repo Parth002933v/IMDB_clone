@@ -2,9 +2,9 @@ import { createContext, RefObject, useContext } from 'react';
 import { LoadingBarRef } from 'react-top-loading-bar';
 
 type LoaderContextType = {
-	loaderRef: RefObject<LoadingBarRef>;
+	loaderRef: RefObject<LoadingBarRef| null>;
 };
-export const LoaderContext = createContext<LoaderContextType | undefined>(undefined);
+export const LoaderContext = createContext<LoaderContextType | null>(null);
 
 export const useLoader = () => {
 	const context = useContext(LoaderContext);

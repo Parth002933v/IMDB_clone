@@ -119,7 +119,7 @@ const NavBar = ({ profileData }: NavBarProps) => {
 
 					<button
 						onClick={() => {
-							console.log('seacc');
+							// console.log('seacc');
 							const e = document.getElementById(
 								'home-search-input'
 							) as HTMLInputElement;

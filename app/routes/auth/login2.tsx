@@ -18,7 +18,7 @@ import {
 import { Route } from '../../../.react-router/types/app/routes/auth/+types/login2';
 
 export async function loader({ request }: Route.LoaderArgs) {
-	console.log("login route2");
+	// console.log("login route2");
 
 	// const cookieSession = await cookieSessionStorage.getSession(
 	// 	request.headers.get('Cookie')
@@ -48,7 +48,7 @@ export async function action({
 		return data('username and password are required', { status: 400 });
 	}
 
-	console.log(username.toString(), password.toString());
+	// console.log(username.toString(), password.toString());
 
 	const requestToken = await createRequestToken();
 	// console.log(requestToken.data.request_token);
@@ -66,7 +66,7 @@ export async function action({
 	// await cookieSessionStorage.commitSession(session)
 
 	const sesstionHearder = await cookieSessionStorage.commitSession(session);
-	console.log('sesstrion header', sesstionHearder, 'sesston header');
+	// console.log('sesstrion header', sesstionHearder, 'sesston header');
 	return data('done!', {
 		headers: {
 			'Cache-Control': 'no-store',

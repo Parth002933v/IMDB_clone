@@ -17,7 +17,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	}
 
 	const url = new URL(request.url);
-	console.log(url);
+	// console.log(url);
 
 	const searchParam = url.searchParams;
 	const groupType = searchParam.get('group-type');
@@ -28,7 +28,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 		throw data('the params is not valid', { status: 400 });
 	}
 
-	console.log(groupType);
+	// console.log(groupType);
 	switch (groupType) {
 		case 'Recommendations': {
 			if (mediaType == 'movie') {
